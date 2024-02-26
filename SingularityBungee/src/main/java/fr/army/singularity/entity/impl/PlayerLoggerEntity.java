@@ -12,16 +12,27 @@ import java.util.UUID;
 public class PlayerLoggerEntity extends AbstractLoggerEntity {
     @Id
     private UUID id;
+    private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private Collection<ConnectionLoggerEntity> connections;
 
-    public void setId(UUID id) {
+    public PlayerLoggerEntity setId(UUID id) {
         this.id = id;
+        return this;
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public PlayerLoggerEntity setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Collection<ConnectionLoggerEntity> getConnections() {
@@ -31,6 +42,7 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
     public void setConnections(Collection<ConnectionLoggerEntity> connections) {
         this.connections = connections;
     }
+
 
     public static PlayerLoggerEntity readFromByte(byte[] data) {
         try {
