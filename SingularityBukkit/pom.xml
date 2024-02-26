@@ -26,13 +26,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Jetbrains annotation -->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>24.0.1</version>
-        </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
