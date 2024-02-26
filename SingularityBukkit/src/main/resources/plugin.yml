@@ -1,0 +1,5 @@
+name: Singularity
+author: Army_
+version: "${project.version}"
+main: fr.army.singularity.SingularityPlugin
+api-version: "1.16"
