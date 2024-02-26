@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 public class PlayerLoggerEntity extends AbstractLoggerEntity {
     @Id
-    @GeneratedValue
     private UUID id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")

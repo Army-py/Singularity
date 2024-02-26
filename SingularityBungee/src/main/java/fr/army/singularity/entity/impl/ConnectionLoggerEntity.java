@@ -107,6 +107,11 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
         this.action = action;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.date = new Date();
+    }
+
     public static ConnectionLoggerEntity readFromByte(byte[] data) {
         try {
             final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
