@@ -2,6 +2,7 @@ package fr.army.singularity;
 
 import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.database.repository.exception.RepositoryException;
+import fr.army.singularity.listener.ListenerLoader;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.database.repository.EMFLoader;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -11,6 +12,7 @@ public class SingularityBungee extends Plugin {
     public static SingularityBungee plugin;
 
     private ChannelRegistry channelRegistry;
+    private ListenerLoader listenerLoader;
     private EMFLoader emfLoader;
     private StorageManager storageManager;
 
@@ -19,6 +21,9 @@ public class SingularityBungee extends Plugin {
 
         channelRegistry = new ChannelRegistry();
         channelRegistry.register();
+
+        listenerLoader = new ListenerLoader();
+        listenerLoader.registerListeners(this);
 
         emfLoader = new EMFLoader();
         emfLoader.setupEntityManagerFactory();
@@ -44,5 +49,9 @@ public class SingularityBungee extends Plugin {
 
     public EMFLoader getEMFLoader() {
         return emfLoader;
+    }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
     }
 }
