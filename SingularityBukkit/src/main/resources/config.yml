@@ -2,12 +2,17 @@
 
 language: "fr_fr"
 
-# Available storage modes:
-# - "bungee"
-# - "mysql"
-# - "sqlite"
-storage_mode: "bungee"
+# Current server name (used for bungee mode)
+server_name: "server"
 
+# Available storage modes:
+# - BUNGEE
+# - MYSQL
+# - SQLITE
+storage_mode: BUNGEE
+
+
+# TODO : separate database configuration in a separate file
 mysql:
   host: "127.0.0.1"
   port: 3306
