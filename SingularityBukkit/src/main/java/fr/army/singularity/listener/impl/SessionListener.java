@@ -44,6 +44,21 @@ public class SessionListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        // Do something
+        final Player player = event.getPlayer();
+        final AsyncDataSender asyncDataSender = new AsyncDataSender();
+
+        final Location location = player.getLocation();
+        final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
+                .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
+                .setAction(0)
+                .setLocX(location.getX())
+                .setLocY(location.getY())
+                .setLocZ(location.getZ())
+                .setWorld(Objects.requireNonNull(location.getWorld()).getName())
+        ;
+        if (Config.storageMode.equals(StorageMode.BUNGEE))
+            connectionLoggerEntity.setServerName(Config.serverName);
+
+        asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
     }
 }
