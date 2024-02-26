@@ -23,4 +23,8 @@ public class SingularityPlugin extends JavaPlugin {
 
         getLogger().info("SingularityPlugin has been disabled!");
     }
+
+    public static SingularityPlugin getPlugin() {
+        return plugin;
+    }
 }
