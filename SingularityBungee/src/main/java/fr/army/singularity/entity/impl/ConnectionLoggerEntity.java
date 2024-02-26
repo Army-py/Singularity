@@ -17,19 +17,15 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
     private Long id;
     private Date date;
     private String ip;
-    private int locX;
-    private int locY;
-    private int locZ;
+    private double locX;
+    private double locY;
+    private double locZ;
     private String world;
     private String serverName;
     private int action;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerLoggerEntity player;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getId() {
         return id;
@@ -39,72 +35,81 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
         return player;
     }
 
-    public void setPlayer(PlayerLoggerEntity player) {
+    public ConnectionLoggerEntity setPlayer(PlayerLoggerEntity player) {
         this.player = player;
+        return this;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public ConnectionLoggerEntity setDate(Date date) {
         this.date = date;
+        return this;
     }
 
     public String getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public ConnectionLoggerEntity setIp(String ip) {
         this.ip = ip;
+        return this;
     }
 
-    public int getLocX() {
+    public double getLocX() {
         return locX;
     }
 
-    public void setLocX(int locX) {
+    public ConnectionLoggerEntity setLocX(double locX) {
         this.locX = locX;
+        return this;
     }
 
-    public int getLocY() {
+    public double getLocY() {
         return locY;
     }
 
-    public void setLocY(int locY) {
+    public ConnectionLoggerEntity setLocY(double locY) {
         this.locY = locY;
+        return this;
     }
 
-    public int getLocZ() {
+    public double getLocZ() {
         return locZ;
     }
 
-    public void setLocZ(int locZ) {
+    public ConnectionLoggerEntity setLocZ(double locZ) {
         this.locZ = locZ;
+        return this;
     }
 
     public String getWorld() {
         return world;
     }
 
-    public void setWorld(String world) {
+    public ConnectionLoggerEntity setWorld(String world) {
         this.world = world;
+        return this;
     }
 
     public String getServerName() {
         return serverName;
     }
 
-    public void setServerName(String serverName) {
+    public ConnectionLoggerEntity setServerName(String serverName) {
         this.serverName = serverName;
+        return this;
     }
 
     public int getAction() {
         return action;
     }
 
-    public void setAction(int action) {
+    public ConnectionLoggerEntity setAction(int action) {
         this.action = action;
+        return this;
     }
 
     @PrePersist
