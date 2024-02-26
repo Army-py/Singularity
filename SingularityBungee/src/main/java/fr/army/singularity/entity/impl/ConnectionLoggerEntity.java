@@ -16,7 +16,6 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
     @GeneratedValue
     private Long id;
     private Date date;
-    private String ip;
     private double locX;
     private double locY;
     private double locZ;
@@ -24,8 +23,27 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
     private String serverName;
     private int action;
 
+    @ManyToOne(optional = false)
+    private PlayerHostLoggerEntity playerHost;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerLoggerEntity player;
+
+
+    @PrePersist
+    public void prePersist() {
+        this.date = new Date();
+    }
+
+    public static ConnectionLoggerEntity readFromByte(byte[] data) {
+        try {
+            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
+            return (ConnectionLoggerEntity) inDataStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public Long getId() {
         return id;
@@ -46,15 +64,6 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
 
     public ConnectionLoggerEntity setDate(Date date) {
         this.date = date;
-        return this;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public ConnectionLoggerEntity setIp(String ip) {
-        this.ip = ip;
         return this;
     }
 
@@ -112,18 +121,12 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
         return this;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.date = new Date();
+    public PlayerHostLoggerEntity getPlayerHost() {
+        return playerHost;
     }
 
-    public static ConnectionLoggerEntity readFromByte(byte[] data) {
-        try {
-            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
-            return (ConnectionLoggerEntity) inDataStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public ConnectionLoggerEntity setPlayerHost(PlayerHostLoggerEntity playerHost) {
+        this.playerHost = playerHost;
+        return this;
     }
-
 }

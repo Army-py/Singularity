@@ -3,6 +3,7 @@ package fr.army.singularity.listener.impl;
 import fr.army.singularity.config.Config;
 import fr.army.singularity.config.StorageMode;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
+import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.task.AsyncDataSender;
 import org.bukkit.Location;
@@ -27,14 +28,20 @@ public class SessionListener implements Listener {
         ;
         asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
 
+        final PlayerHostLoggerEntity playerHostLoggerEntity = new PlayerHostLoggerEntity()
+                .setPlayer(playerLoggerEntity)
+                .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
+        ;
+        asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+
         final Location location = player.getLocation();
         final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
-                .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
                 .setAction(1)
                 .setLocX(location.getX())
                 .setLocY(location.getY())
                 .setLocZ(location.getZ())
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
+                .setPlayerHost(playerHostLoggerEntity)
         ;
         if (Config.storageMode.equals(StorageMode.BUNGEE))
             connectionLoggerEntity.setServerName(Config.serverName);
@@ -47,14 +54,26 @@ public class SessionListener implements Listener {
         final Player player = event.getPlayer();
         final AsyncDataSender asyncDataSender = new AsyncDataSender();
 
+        final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
+                .setId(player.getUniqueId())
+                .setName(player.getName())
+        ;
+        asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
+
+        final PlayerHostLoggerEntity playerHostLoggerEntity = new PlayerHostLoggerEntity()
+                .setPlayer(playerLoggerEntity)
+                .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
+        ;
+        asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+
         final Location location = player.getLocation();
         final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
-                .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
                 .setAction(0)
                 .setLocX(location.getX())
                 .setLocY(location.getY())
                 .setLocZ(location.getZ())
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
+                .setPlayerHost(playerHostLoggerEntity)
         ;
         if (Config.storageMode.equals(StorageMode.BUNGEE))
             connectionLoggerEntity.setServerName(Config.serverName);

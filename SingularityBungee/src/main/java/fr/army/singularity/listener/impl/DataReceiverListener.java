@@ -3,6 +3,7 @@ package fr.army.singularity.listener.impl;
 import fr.army.singularity.SingularityBungee;
 import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
+import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -28,8 +29,10 @@ public class DataReceiverListener implements Listener {
             final ObjectInputStream inputStream = new ObjectInputStream(input);
 
             final Object object = inputStream.readObject();
-            if (object instanceof PlayerLoggerEntity playerEntity){
+            if (object instanceof PlayerLoggerEntity playerEntity) {
                 storageManager.savePlayerLogger(playerEntity);
+            } else if (object instanceof PlayerHostLoggerEntity hostEntity) {
+                storageManager.savePlayerHostLogger(hostEntity);
             } else if (object instanceof ConnectionLoggerEntity connectionEntity) {
                 storageManager.saveConnectionLogger(connectionEntity);
             }

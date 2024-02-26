@@ -17,6 +17,20 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private Collection<ConnectionLoggerEntity> connections;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "player")
+    private PlayerHostLoggerEntity host;
+
+
+    public static PlayerLoggerEntity readFromByte(byte[] data) {
+        try {
+            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
+            return (PlayerLoggerEntity) inDataStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public PlayerLoggerEntity setId(UUID id) {
         this.id = id;
         return this;
@@ -43,13 +57,12 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
         this.connections = connections;
     }
 
+    public PlayerHostLoggerEntity getHost() {
+        return host;
+    }
 
-    public static PlayerLoggerEntity readFromByte(byte[] data) {
-        try {
-            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
-            return (PlayerLoggerEntity) inDataStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public PlayerLoggerEntity setHost(PlayerHostLoggerEntity host) {
+        this.host = host;
+        return this;
     }
 }
