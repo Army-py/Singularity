@@ -3,13 +3,13 @@
 language: "fr_fr"
 
 # Current server name (used for bungee mode)
-server_name: "server"
+server-name: "server"
 
 # Available storage modes:
 # - BUNGEE
 # - MYSQL
 # - SQLITE
-storage_mode: BUNGEE
+storage-mode: BUNGEE
 
 
 # TODO : separate database configuration in a separate file

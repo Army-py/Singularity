@@ -6,6 +6,8 @@ public class Config {
 
     private final YamlConfiguration config;
 
+    public static String language;
+    public static String serverName;
     public static StorageMode storageMode;
     public static String mysqlHost;
     public static int mysqlPort;
@@ -19,6 +21,8 @@ public class Config {
     }
 
     public void load() {
+        language = config.getString("language");
+        serverName = config.getString("server-name");
         storageMode = StorageMode.valueOf(config.getString("storage-mode"));
         mysqlHost = config.getString("mysql.host");
         mysqlPort = config.getInt("mysql.port");
