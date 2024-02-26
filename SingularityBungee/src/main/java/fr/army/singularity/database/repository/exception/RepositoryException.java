@@ -1,4 +1,4 @@
-package fr.army.singularity.repository.exception;
+package fr.army.singularity.database.repository.exception;
 
 public abstract class RepositoryException extends Exception {
 

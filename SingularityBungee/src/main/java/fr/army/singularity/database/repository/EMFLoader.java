@@ -1,8 +1,8 @@
-package fr.army.singularity.repository;
+package fr.army.singularity.database.repository;
 
 import fr.army.singularity.SingularityBungee;
-import fr.army.singularity.repository.exception.RepositoryException;
-import fr.army.singularity.repository.exception.impl.EntityManagerNotInitializedException;
+import fr.army.singularity.database.repository.exception.RepositoryException;
+import fr.army.singularity.database.repository.exception.impl.EntityManagerNotInitializedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

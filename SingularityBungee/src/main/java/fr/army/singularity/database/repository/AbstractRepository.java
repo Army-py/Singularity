@@ -1,10 +1,10 @@
-package fr.army.singularity.repository;
+package fr.army.singularity.database.repository;
 
 import fr.army.singularity.SingularityBungee;
-import fr.army.singularity.repository.callback.AsyncCallBackObject;
-import fr.army.singularity.repository.callback.AsyncCallBackObjectList;
-import fr.army.singularity.repository.exception.RepositoryException;
-import fr.army.singularity.repository.exception.impl.EntityNotFoundException;
+import fr.army.singularity.database.repository.callback.AsyncCallBackObject;
+import fr.army.singularity.database.repository.callback.AsyncCallBackObjectList;
+import fr.army.singularity.database.repository.exception.RepositoryException;
+import fr.army.singularity.database.repository.exception.impl.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaBuilder;

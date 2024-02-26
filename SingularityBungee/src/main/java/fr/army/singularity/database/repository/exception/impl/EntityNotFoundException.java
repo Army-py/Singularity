@@ -1,6 +1,6 @@
-package fr.army.singularity.repository.exception.impl;
+package fr.army.singularity.database.repository.exception.impl;
 
-import fr.army.singularity.repository.exception.RepositoryException;
+import fr.army.singularity.database.repository.exception.RepositoryException;
 
 public class EntityNotFoundException extends RepositoryException {
 

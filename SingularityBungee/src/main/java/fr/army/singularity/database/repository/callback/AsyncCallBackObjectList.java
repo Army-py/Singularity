@@ -1,4 +1,4 @@
-package fr.army.singularity.repository.callback;
+package fr.army.singularity.database.repository.callback;
 
 import java.util.List;
 
