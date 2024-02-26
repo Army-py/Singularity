@@ -1,0 +1,4 @@
+name: Singularity
+main: fr.army.singularity.SingularityBungee
+version: "${project.version}"
+author: Army_
