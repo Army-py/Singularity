@@ -3,30 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.army</groupId>
+        <artifactId>Singularity</artifactId>
+        <version>1.0.0</version>
+    </parent>
 
-    <groupId>fr.army</groupId>
-    <artifactId>Singularity</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-
-    <name>Singularity</name>
-    <modules>
-        <module>SingularityBukkit</module>
-        <module>SingularityBungee</module>
-    </modules>
+    <artifactId>SingularityBungee</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/army-py/Singularity</url>
-        </repository>
-    </distributionManagement>
 
 </project>
