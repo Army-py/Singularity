@@ -1,13 +1,17 @@
 package fr.army.singularity.entity.impl;
 
+import fr.army.singularity.entity.AbstractLoggerEntity;
 import fr.army.singularity.entity.IEntity;
 import jakarta.persistence.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Date;
 
 
 @Entity
-public class ConnectionLoggerEntity implements IEntity {
+public class ConnectionLoggerEntity extends AbstractLoggerEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -102,4 +106,14 @@ public class ConnectionLoggerEntity implements IEntity {
     public void setAction(int action) {
         this.action = action;
     }
+
+    public static ConnectionLoggerEntity readFromByte(byte[] data) {
+        try {
+            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
+            return (ConnectionLoggerEntity) inDataStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

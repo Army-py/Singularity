@@ -1,13 +1,15 @@
 package fr.army.singularity.entity.impl;
 
+import fr.army.singularity.entity.AbstractLoggerEntity;
 import fr.army.singularity.entity.IEntity;
 import jakarta.persistence.*;
 
+import java.io.*;
 import java.util.Collection;
 import java.util.UUID;
 
 @Entity
-public class PlayerLoggerEntity implements IEntity {
+public class PlayerLoggerEntity extends AbstractLoggerEntity {
     @Id
     @GeneratedValue
     private UUID id;
@@ -29,5 +31,14 @@ public class PlayerLoggerEntity implements IEntity {
 
     public void setConnections(Collection<ConnectionLoggerEntity> connections) {
         this.connections = connections;
+    }
+
+    public static PlayerLoggerEntity readFromByte(byte[] data) {
+        try {
+            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
+            return (PlayerLoggerEntity) inDataStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
