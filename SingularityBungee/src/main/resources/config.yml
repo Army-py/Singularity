@@ -1,0 +1,8 @@
+
+
+language: "fr_fr"
+
+# Available storage modes:
+# - MYSQL
+# - SQLITE
+storage-mode: SQLITE
