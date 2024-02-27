@@ -30,6 +30,18 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayerLoggerEntity that)) return false;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
 
     public PlayerLoggerEntity setId(UUID id) {
         this.id = id;

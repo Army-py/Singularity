@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class PlayerHostLoggerEntity extends AbstractLoggerEntity {
@@ -27,6 +28,18 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity {
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayerHostLoggerEntity that)) return false;
+        return getId().equals(that.getId()) && getPlayer().equals(that.getPlayer());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPlayer().getId());
     }
 
 
