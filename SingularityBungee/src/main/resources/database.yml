@@ -1,5 +1,5 @@
 
-
+# If storage-mode is BUNGEE, go to the BungeeCord configuration file and edit the database configuration
 mysql:
   host: "127.0.0.1"
   port: 3306

@@ -26,7 +26,7 @@ public class SingularityPlugin extends JavaPlugin {
         configLoader = new ConfigLoader(this);
 
         try {
-            this.config = new Config(configLoader.initFile("config.yml"));
+            this.config = new Config(configLoader.initFile("config.yml"), configLoader.initFile("database.yml"));
         } catch (FileNotFoundException e) {
             getLogger().severe("Unable to load config.yml");
             getServer().getPluginManager().disablePlugin(this);
