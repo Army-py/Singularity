@@ -31,7 +31,7 @@ public class ConfigLoader {
             InputStream in = plugin.getResourceAsStream(fileName);
             in.transferTo(outputStream);
         }
-        return ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(plugin.getDataFolder(), "config.yml"));
+        return ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(plugin.getDataFolder(), fileName));
     }
 
 }
