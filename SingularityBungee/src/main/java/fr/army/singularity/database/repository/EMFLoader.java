@@ -1,6 +1,8 @@
 package fr.army.singularity.database.repository;
 
 import fr.army.singularity.SingularityBungee;
+import fr.army.singularity.config.Config;
+import fr.army.singularity.config.StorageMode;
 import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.database.repository.exception.impl.EntityManagerNotInitializedException;
 import jakarta.persistence.EntityManager;
@@ -13,12 +15,14 @@ public class EMFLoader {
 
     private static EntityManagerFactory entityManagerFactory = null;
 
-    private static final boolean remoteDatabase = false;
-    private static final String databaseHost = "localhost";
-    private static final int databasePort = 3306;
-    private static final String databaseName = "database";
-    private static final String databaseUsername = "username";
-    private static final String databasePassword = "password";
+    private static final boolean remoteDatabase = Config.storageMode == StorageMode.MYSQL;
+    private static final String databaseHost = Config.mysqlHost;
+    private static final int databasePort = Config.mysqlPort;
+    private static final String databaseName = Config.mysqlDatabase;
+    private static final String databaseUsername = Config.mysqlUsername;
+    private static final String databasePassword = Config.mysqlPassword;
+
+    private static final String sqliteFile = Config.sqliteFile;
 
     public void setupEntityManagerFactory() {
         if (entityManagerFactory == null || !entityManagerFactory.isOpen()) {
@@ -32,7 +36,7 @@ public class EMFLoader {
                 properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
             } else {
                 properties.put("javax.persistence.jdbc.driver", "org.sqlite.JDBC");
-                properties.put("javax.persistence.jdbc.url", "jdbc:sqlite:./" + SingularityBungee.getPlugin().getDataFolder().getPath() + "/database" + "?autoReconnect=true");
+                properties.put("javax.persistence.jdbc.url", "jdbc:sqlite:./" + SingularityBungee.getPlugin().getDataFolder().getPath() + "/" + sqliteFile + "?autoReconnect=true");
                 properties.put("hibernate.dialect", "org.hibernate.dialect.SQLiteDialect");
             }
 
