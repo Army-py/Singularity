@@ -1,7 +1,9 @@
 package fr.army.singularity.listener.impl;
 
+import fr.army.singularity.SingularityPlugin;
 import fr.army.singularity.config.Config;
 import fr.army.singularity.config.StorageMode;
+import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
@@ -16,6 +18,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Objects;
 
 public class SessionListener implements Listener {
+
+    private final StorageManager storageManager;
+
+    public SessionListener(SingularityPlugin plugin) {
+        this.storageManager = plugin.getStorageManager();
+    }
+
+    // TODO : code factorization
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -43,10 +53,17 @@ public class SessionListener implements Listener {
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
                 .setPlayerHost(playerHostLoggerEntity)
         ;
-        if (Config.storageMode.equals(StorageMode.BUNGEE))
+
+        if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-        asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+            asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+        }
+        else {
+            storageManager.savePlayerLogger(playerLoggerEntity);
+            storageManager.savePlayerHostLogger(playerHostLoggerEntity);
+            storageManager.saveConnectionLogger(connectionLoggerEntity);
+        }
     }
 
     @EventHandler
@@ -75,9 +92,16 @@ public class SessionListener implements Listener {
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
                 .setPlayerHost(playerHostLoggerEntity)
         ;
-        if (Config.storageMode.equals(StorageMode.BUNGEE))
+
+        if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-        asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+            asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+        }
+        else {
+            storageManager.savePlayerLogger(playerLoggerEntity);
+            storageManager.savePlayerHostLogger(playerHostLoggerEntity);
+            storageManager.saveConnectionLogger(connectionLoggerEntity);
+        }
     }
 }
