@@ -8,6 +8,6 @@ public class ListenerLoader {
 
     public void registerListeners(SingularityPlugin plugin) {
         final PluginManager pluginManager = plugin.getServer().getPluginManager();
-        pluginManager.registerEvents(new SessionListener(), plugin);
+        pluginManager.registerEvents(new SessionListener(plugin), plugin);
     }
 }
