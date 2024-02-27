@@ -8,6 +8,7 @@ import fr.army.singularity.listener.ListenerLoader;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.database.repository.EMFLoader;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,13 +32,24 @@ public class SingularityBungee extends Plugin {
 
         configLoader = new ConfigLoader(this);
 
+        final Configuration configFile;
+        final Configuration databaseConfigFile;
         try {
-            this.config = new Config(configLoader.initFile("config.yml"), configLoader.initFile("database.yml"));
+            configFile = configLoader.initFile("config.yml");
         } catch (IOException e) {
             getLogger().severe("Unable to load config.yml");
             getProxy().getPluginManager().unregisterListeners(this);
             return;
         }
+        try {
+            databaseConfigFile = configLoader.initFile("database.yml");
+        } catch (IOException e) {
+            getLogger().severe("Unable to load database.yml");
+            getProxy().getPluginManager().unregisterListeners(this);
+            return;
+        }
+        this.config = new Config(configFile, databaseConfigFile);
+        this.config.load();
 
         listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
