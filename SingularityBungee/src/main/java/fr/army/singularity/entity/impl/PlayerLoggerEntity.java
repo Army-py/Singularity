@@ -1,7 +1,6 @@
 package fr.army.singularity.entity.impl;
 
 import fr.army.singularity.entity.AbstractLoggerEntity;
-import fr.army.singularity.entity.IEntity;
 import jakarta.persistence.*;
 
 import java.io.*;
@@ -9,7 +8,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @Entity
-public class PlayerLoggerEntity extends AbstractLoggerEntity {
+public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializable {
     @Id
     private UUID id;
     private String name;
@@ -21,14 +20,15 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
     private PlayerHostLoggerEntity host;
 
 
-    public static PlayerLoggerEntity readFromByte(byte[] data) {
-        try {
-            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
-            return (PlayerLoggerEntity) inDataStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // public static PlayerLoggerEntity fromSnapshot(PlayerLoggerSnapshot snapshot){
+    //     return new PlayerLoggerEntity()
+    //             .setId(snapshot.id())
+    //             .setName(snapshot.name());
+    // }
+    //
+    // public PlayerLoggerSnapshot toSnapshot() {
+    //     return new PlayerLoggerSnapshot(getId(), getName());
+    // }
 
     @Override
     public boolean equals(Object o) {
@@ -77,4 +77,20 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity {
         this.host = host;
         return this;
     }
+
+
+    // public record PlayerLoggerSnapshot(UUID id, String name) implements Serializable {
+    //
+    //     public byte[] writeToByte() {
+    //         final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+    //         final ObjectOutputStream outDataStream;
+    //         try {
+    //             outDataStream = new ObjectOutputStream(outByteStream);
+    //             outDataStream.writeObject(this);
+    //         } catch (IOException e) {
+    //             throw new RuntimeException(e);
+    //         }
+    //         return outByteStream.toByteArray();
+    //     }
+    // }
 }

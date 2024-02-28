@@ -22,6 +22,7 @@ public class DataReceiverListener implements Listener {
         this.storageManager = plugin.getStorageManager();
     }
 
+    @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataReceived(PluginMessageEvent event) {
         final ByteArrayInputStream input = new ByteArrayInputStream(event.getData());

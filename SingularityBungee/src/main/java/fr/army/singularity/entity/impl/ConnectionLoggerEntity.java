@@ -1,17 +1,17 @@
 package fr.army.singularity.entity.impl;
 
 import fr.army.singularity.entity.AbstractLoggerEntity;
-import fr.army.singularity.entity.IEntity;
 import jakarta.persistence.*;
 
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
-public class ConnectionLoggerEntity extends AbstractLoggerEntity {
+public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -35,14 +35,22 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
         this.date = new Date();
     }
 
-    public static ConnectionLoggerEntity readFromByte(byte[] data) {
-        try {
-            final ObjectInputStream inDataStream = new ObjectInputStream(new ByteArrayInputStream(data));
-            return (ConnectionLoggerEntity) inDataStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // public static ConnectionLoggerEntity fromSnapshot(ConnectionLoggerSnapshot snapshot) {
+    //     return new ConnectionLoggerEntity()
+    //             .setDate(snapshot.date())
+    //             .setLocX(snapshot.locX())
+    //             .setLocY(snapshot.locY())
+    //             .setLocZ(snapshot.locZ())
+    //             .setWorld(snapshot.world())
+    //             .setServerName(snapshot.serverName())
+    //             .setAction(snapshot.action())
+    //             .setPlayerHost(PlayerHostLoggerEntity.fromSnapshot(snapshot.playerHost()))
+    //             .setPlayer(PlayerLoggerEntity.fromSnapshot(snapshot.player()));
+    // }
+    //
+    // public ConnectionLoggerSnapshot toSnapshot() {
+    //     return new ConnectionLoggerSnapshot(getDate(), getLocX(), getLocY(), getLocZ(), getWorld(), getServerName(), getAction(), getPlayerHost().toSnapshot(), getPlayer().toSnapshot());
+    // }
 
 
     public Long getId() {
@@ -129,4 +137,22 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity {
         this.playerHost = playerHost;
         return this;
     }
+
+
+    // public record ConnectionLoggerSnapshot(Date date, double locX, double locY, double locZ, String world,
+    //                                        String serverName, int action, PlayerHostLoggerEntity.PlayerHostLoggerSnapshot playerHost,
+    //                                        PlayerLoggerEntity.PlayerLoggerSnapshot player) implements Serializable {
+    //
+    //     public byte[] writeToByte() {
+    //         final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+    //         final ObjectOutputStream outDataStream;
+    //         try {
+    //             outDataStream = new ObjectOutputStream(outByteStream);
+    //             outDataStream.writeObject(this);
+    //         } catch (IOException e) {
+    //             throw new RuntimeException(e);
+    //         }
+    //         return outByteStream.toByteArray();
+    //     }
+    // }
 }
