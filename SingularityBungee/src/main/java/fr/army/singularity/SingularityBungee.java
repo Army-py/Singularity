@@ -55,7 +55,7 @@ public class SingularityBungee extends Plugin {
         listenerLoader.registerListeners(this);
 
         emfLoader = new EMFLoader();
-        emfLoader.setupEntityManagerFactory();
+        emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
 
         try {
             storageManager = new StorageManager(emfLoader.getEntityManager());

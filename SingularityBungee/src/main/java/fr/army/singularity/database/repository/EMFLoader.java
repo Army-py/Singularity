@@ -8,6 +8,7 @@ import fr.army.singularity.database.repository.exception.impl.EntityManagerNotIn
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
 
@@ -34,7 +35,7 @@ public class EMFLoader {
         sqliteFile = Config.sqliteFile;
     }
 
-    public void setupEntityManagerFactory() {
+    public void setupEntityManagerFactory(@NotNull String dataFolderPath) {
         if (entityManagerFactory == null || !entityManagerFactory.isOpen()) {
             Properties properties = new Properties();
 
@@ -46,7 +47,7 @@ public class EMFLoader {
                 properties.put("hibernate.dialect", "org.hibernate.community.dialect.MariaDBDialect");
             } else {
                 properties.put("jakarta.persistence.jdbc.driver", "org.sqlite.JDBC");
-                properties.put("jakarta.persistence.jdbc.url", "jdbc:sqlite:" + SingularityBungee.getPlugin().getDataFolder().getPath() + "/" + sqliteFile);
+                properties.put("jakarta.persistence.jdbc.url", "jdbc:sqlite:" + dataFolderPath + "/" + sqliteFile);
                 properties.put("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect");
             }
 
@@ -63,7 +64,6 @@ public class EMFLoader {
     }
 
     public EntityManager getEntityManager() throws RepositoryException {
-        setupEntityManagerFactory();
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
             return entityManagerFactory.createEntityManager();
         } else {
