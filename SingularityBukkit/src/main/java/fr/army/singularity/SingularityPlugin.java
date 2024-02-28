@@ -49,13 +49,14 @@ public class SingularityPlugin extends JavaPlugin {
             return;
         }
         this.config = new Config(configFile, databaseConfigFile);
+        this.config.load();
 
         listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
 
-        if (Config.storageMode.equals(StorageMode.BUNGEE)){
+        if (!Config.storageMode.equals(StorageMode.BUNGEE)){
             emfLoader = new EMFLoader();
-            emfLoader.setupEntityManagerFactory();
+            emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
 
             try {
                 storageManager = new StorageManager(emfLoader.getEntityManager());
