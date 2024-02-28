@@ -19,6 +19,7 @@ public class ConfigLoader {
     }
 
     public YamlConfiguration initFile(@NotNull String fileName) throws FileNotFoundException {
+        plugin.saveDefaultConfig();
         final File file = new File(plugin.getDataFolder(), fileName);
         if (!file.exists()) {
             try {
