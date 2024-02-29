@@ -71,6 +71,12 @@ public class SingularityPlugin extends JavaPlugin {
 
     public void onDisable() {
         channelRegistry.unregister(this);
+        if (storageManager != null) {
+            storageManager.close();
+        }
+        if (emfLoader != null) {
+            EMFLoader.closeEntityManagerFactory();
+        }
 
         getLogger().info("SingularityPlugin has been disabled!");
     }

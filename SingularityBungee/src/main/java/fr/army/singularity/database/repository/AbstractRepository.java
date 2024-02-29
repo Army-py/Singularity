@@ -36,7 +36,6 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         entityManager.persist(entity);
 
         entityTransaction.commit();
-        entityManager.close();
     }
 
     public synchronized void insert(T entity) {
@@ -57,7 +56,6 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         T mergedEntity = entityManager.merge(entity);
 
         entityTransaction.commit();
-        entityManager.close();
         return mergedEntity;
     }
 
@@ -75,7 +73,6 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         entityManager.remove(entityManager.merge(entity));
 
         entityTransaction.commit();
-        entityManager.close();
     }
 
     public void delete(T entity) {
@@ -120,7 +117,6 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         }
 
         entityTransaction.commit();
-        entityManager.close();
         return e;
     }
 

@@ -52,13 +52,14 @@ public class SingularityBungee extends Plugin {
         this.config.load();
 
 
-        emfLoader = new EMFLoader();
-        emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
+        this.emfLoader = new EMFLoader();
+        this.emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
 
         try {
-            storageManager = new StorageManager(emfLoader.getEntityManager());
+            storageManager = new StorageManager(this.emfLoader.getEntityManager());
         } catch (RepositoryException e) {
             getLogger().severe("An error occurred while setting up the storage manager: " + e.getMessage());
+            getProxy().getPluginManager().unregisterListeners(this);
         }
 
         listenerLoader = new ListenerLoader();
@@ -70,6 +71,9 @@ public class SingularityBungee extends Plugin {
 
     public void onDisable() {
         channelRegistry.unregister();
+        storageManager.close();
+        EMFLoader.closeEntityManagerFactory();
+
 
         getLogger().info("SingularityBungee has been disabled!");
     }

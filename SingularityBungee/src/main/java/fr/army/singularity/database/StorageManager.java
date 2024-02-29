@@ -7,14 +7,17 @@ import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import jakarta.persistence.EntityManager;
+import org.jetbrains.annotations.NotNull;
 
 public class StorageManager {
 
+    private final EntityManager entityManager;
     private final PlayerLoggerRepository playerLoggerRepository;
     private final ConnectionLoggerRepository connectionLoggerRepository;
     private final PlayerHostLoggerRepository playerHostLoggerRepository;
 
-    public StorageManager(EntityManager entityManager) {
+    public StorageManager(@NotNull EntityManager entityManager) {
+        this.entityManager = entityManager;
         this.playerLoggerRepository = new PlayerLoggerRepository(PlayerLoggerEntity.class, entityManager);
         this.connectionLoggerRepository = new ConnectionLoggerRepository(ConnectionLoggerEntity.class, entityManager);
         this.playerHostLoggerRepository = new PlayerHostLoggerRepository(PlayerHostLoggerEntity.class, entityManager);
@@ -38,5 +41,9 @@ public class StorageManager {
 
     public void saveConnectionLogger(ConnectionLoggerEntity connectionLoggerEntity) {
         connectionLoggerRepository.insert(connectionLoggerEntity);
+    }
+
+    public void close() {
+        entityManager.close();
     }
 }
