@@ -39,12 +39,12 @@ public class DataReceiverListener implements Listener {
             final ObjectInputStream inputStream = new ObjectInputStream(input);
 
             final Object object = inputStream.readObject();
-            if (object instanceof PlayerLoggerEntity.PlayerLoggerSnapshot playerSnapshot) {
-                storageManager.savePlayerLogger(PlayerLoggerEntity.fromSnapshot(playerSnapshot));
-            } else if (object instanceof PlayerHostLoggerEntity.PlayerHostLoggerSnapshot hostSnapshot) {
-                storageManager.savePlayerHostLogger(PlayerHostLoggerEntity.fromSnapshot(hostSnapshot));
-            } else if (object instanceof ConnectionLoggerEntity.ConnectionLoggerSnapshot connectionSnapshot) {
-                storageManager.saveConnectionLogger(ConnectionLoggerEntity.fromSnapshot(connectionSnapshot));
+            if (object instanceof PlayerLoggerEntity playerEntity) {
+                storageManager.savePlayerLogger(playerEntity);
+            } else if (object instanceof PlayerHostLoggerEntity hostEntity) {
+                storageManager.savePlayerHostLogger(hostEntity);
+            } else if (object instanceof ConnectionLoggerEntity connectionEntity) {
+                storageManager.saveConnectionLogger(connectionEntity);
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
