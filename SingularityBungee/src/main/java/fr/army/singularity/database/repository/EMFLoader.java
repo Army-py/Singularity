@@ -39,6 +39,7 @@ public class EMFLoader {
         if (entityManagerFactory == null || !entityManagerFactory.isOpen()) {
             Properties properties = new Properties();
 
+            properties.put("hibernate.hbm2ddl.auto", "create");
             if (remoteDatabase) {
                 properties.put("jakarta.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
                 properties.put("jakarta.persistence.jdbc.url", "jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?autoReconnect=true");
