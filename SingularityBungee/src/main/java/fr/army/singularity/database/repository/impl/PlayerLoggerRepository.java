@@ -27,6 +27,6 @@ public class PlayerLoggerRepository extends AbstractRepository<PlayerLoggerEntit
    // }
 
     public PlayerLoggerEntity findByPlayerUuid(UUID uuid) {
-        return entityManager.find(entityClass, uuid);
+        return entityManager.find(entityClass, uuid.toString());
     }
 }

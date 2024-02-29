@@ -3,10 +3,7 @@ package fr.army.singularity.entity.impl;
 import fr.army.singularity.entity.AbstractLoggerEntity;
 import jakarta.persistence.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -22,15 +19,15 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     private String ip;
 
 
-    // public static PlayerHostLoggerEntity fromSnapshot(PlayerHostLoggerSnapshot snapshot) {
-    //     return new PlayerHostLoggerEntity()
-    //             .setIp(snapshot.ip())
-    //             .setPlayer(PlayerLoggerEntity.fromSnapshot(snapshot.player()));
-    // }
-    //
-    // public PlayerHostLoggerSnapshot toSnapshot() {
-    //     return new PlayerHostLoggerSnapshot(getIp(), getPlayer().toSnapshot());
-    // }
+    public static PlayerHostLoggerEntity fromSnapshot(PlayerHostLoggerSnapshot snapshot) {
+        return new PlayerHostLoggerEntity()
+                .setIp(snapshot.ip())
+                .setPlayer(PlayerLoggerEntity.fromSnapshot(snapshot.player()));
+    }
+
+    public PlayerHostLoggerSnapshot toSnapshot() {
+        return new PlayerHostLoggerSnapshot(getIp(), getPlayer().toSnapshot());
+    }
 
 
     @Override
@@ -80,18 +77,32 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     }
 
 
-    // public record PlayerHostLoggerSnapshot(String ip, PlayerLoggerEntity.PlayerLoggerSnapshot player) implements Serializable {
-    //
-    //     public byte[] writeToByte() {
-    //         final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-    //         final ObjectOutputStream outDataStream;
-    //         try {
-    //             outDataStream = new ObjectOutputStream(outByteStream);
-    //             outDataStream.writeObject(this);
-    //         } catch (IOException e) {
-    //             throw new RuntimeException(e);
-    //         }
-    //         return outByteStream.toByteArray();
-    //     }
-    // }
+    public record PlayerHostLoggerSnapshot(String ip, PlayerLoggerEntity.PlayerLoggerSnapshot player) implements Serializable {
+
+        public byte[] writeToByte() {
+            final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+            final ObjectOutputStream outDataStream;
+            try {
+                outDataStream = new ObjectOutputStream(outByteStream);
+                outDataStream.writeObject(this);
+                outDataStream.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return outByteStream.toByteArray();
+        }
+
+        // public byte[] writeToByte() {
+        //     final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+        //     final DataOutputStream outDataStream = new DataOutputStream(outByteStream);
+        //     try {
+        //         outDataStream.writeUTF(ip);
+        //         outDataStream.write(player.writeToByte());
+        //         outDataStream.flush();
+        //     } catch (IOException e) {
+        //         throw new RuntimeException(e);
+        //     }
+        //     return outByteStream.toByteArray();
+        // }
+    }
 }
