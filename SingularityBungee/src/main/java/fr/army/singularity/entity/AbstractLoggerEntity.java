@@ -12,6 +12,7 @@ public abstract class AbstractLoggerEntity implements IEntity {
         try {
             outDataStream = new ObjectOutputStream(outByteStream);
             outDataStream.writeObject(this);
+            outDataStream.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
