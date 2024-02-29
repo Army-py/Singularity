@@ -51,8 +51,6 @@ public class SingularityBungee extends Plugin {
         this.config = new Config(configFile, databaseConfigFile);
         this.config.load();
 
-        listenerLoader = new ListenerLoader();
-        listenerLoader.registerListeners(this);
 
         emfLoader = new EMFLoader();
         emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
@@ -62,6 +60,10 @@ public class SingularityBungee extends Plugin {
         } catch (RepositoryException e) {
             getLogger().severe("An error occurred while setting up the storage manager: " + e.getMessage());
         }
+
+        listenerLoader = new ListenerLoader();
+        listenerLoader.registerListeners(this);
+
 
         getLogger().info("SingularityBungee has been enabled!");
     }
