@@ -2,6 +2,7 @@ package fr.army.singularity.listener.impl;
 
 import fr.army.singularity.SingularityBungee;
 import fr.army.singularity.database.StorageManager;
+import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
@@ -28,9 +29,6 @@ public class DataReceiverListener implements Listener {
     public void onDataReceived(PluginMessageEvent event) {
 
         if (!ChannelRegistry.CHANNEL.equals(event.getTag())){
-            System.out.println("Channel is not good");
-            System.out.println(event.getTag());
-            System.out.println(ChannelRegistry.CHANNEL);
             return;
         }
 
@@ -41,12 +39,8 @@ public class DataReceiverListener implements Listener {
             final Object object = inputStream.readObject();
             if (object instanceof PlayerLoggerEntity playerEntity) {
                 storageManager.savePlayerLogger(playerEntity);
-            } else if (object instanceof PlayerHostLoggerEntity hostEntity) {
-                storageManager.savePlayerHostLogger(hostEntity);
-            } else if (object instanceof ConnectionLoggerEntity connectionEntity) {
-                storageManager.saveConnectionLogger(connectionEntity);
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | RepositoryException e) {
             throw new RuntimeException(e);
         }
 

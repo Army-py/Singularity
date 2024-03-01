@@ -4,9 +4,11 @@ import fr.army.singularity.SingularityPlugin;
 import fr.army.singularity.config.Config;
 import fr.army.singularity.config.StorageMode;
 import fr.army.singularity.database.StorageManager;
+import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
+import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.AsyncDataSender;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -41,6 +43,7 @@ public class SessionListener implements Listener {
                 .setPlayer(playerLoggerEntity)
                 .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
         ;
+        playerLoggerEntity.getHosts().add(playerHostLoggerEntity);
 
         final Location location = player.getLocation();
         final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
@@ -50,19 +53,25 @@ public class SessionListener implements Listener {
                 .setLocZ(location.getZ())
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
                 .setPlayerHost(playerHostLoggerEntity)
+                .setPlayer(playerLoggerEntity)
         ;
+        playerHostLoggerEntity.getConnections().add(connectionLoggerEntity);
+        playerLoggerEntity.getConnections().add(connectionLoggerEntity);
 
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
             asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
-            asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
-            asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
-        }
-        else {
-            storageManager.savePlayerLogger(playerLoggerEntity);
-            storageManager.savePlayerHostLogger(playerHostLoggerEntity);
-            storageManager.saveConnectionLogger(connectionLoggerEntity);
+            // asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+            // asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+        } else {
+            try {
+                storageManager.savePlayerLogger(playerLoggerEntity);
+                // storageManager.savePlayerHostLogger(playerHostLoggerEntity);
+                // storageManager.saveConnectionLogger(connectionLoggerEntity);
+            } catch (RepositoryException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
