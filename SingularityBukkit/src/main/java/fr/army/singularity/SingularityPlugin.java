@@ -51,29 +51,26 @@ public class SingularityPlugin extends JavaPlugin {
         this.config = new Config(configFile, databaseConfigFile);
         this.config.load();
 
-        listenerLoader = new ListenerLoader();
-        listenerLoader.registerListeners(this);
-
         if (!Config.storageMode.equals(StorageMode.BUNGEE)){
             emfLoader = new EMFLoader();
             emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
 
             try {
-                storageManager = new StorageManager(emfLoader.getEntityManager());
+                storageManager = new StorageManager(emfLoader);
             } catch (RepositoryException e) {
                 getLogger().severe("An error occurred while setting up the storage manager: " + e.getMessage());
                 getServer().getPluginManager().disablePlugin(this);
             }
         }
 
+        listenerLoader = new ListenerLoader();
+        listenerLoader.registerListeners(this);
+
         getLogger().info("SingularityPlugin has been enabled!");
     }
 
     public void onDisable() {
         channelRegistry.unregister(this);
-        if (storageManager != null) {
-            storageManager.close();
-        }
         if (emfLoader != null) {
             EMFLoader.closeEntityManagerFactory();
         }

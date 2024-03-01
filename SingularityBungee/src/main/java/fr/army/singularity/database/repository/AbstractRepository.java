@@ -19,23 +19,23 @@ import java.util.function.Supplier;
 public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
 
     protected final Class<T> entityClass;
-    protected final EntityManager entityManager;
-    protected final CriteriaBuilder criteriaBuilder;
+    protected final EMFLoader emfLoader;
 
-    public AbstractRepository(Class<T> entityClass, EntityManager entityManager) {
+    public AbstractRepository(Class<T> entityClass, EMFLoader emfLoader) {
         this.entityClass = entityClass;
-        this.entityManager = entityManager;
-        this.criteriaBuilder = entityManager.getCriteriaBuilder();
+        this.emfLoader = emfLoader;
     }
 
     @Transactional
     protected synchronized void persist(T entity) throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
         entityManager.persist(entity);
 
         entityTransaction.commit();
+        entityManager.close();
     }
 
     public synchronized void insert(T entity) {
@@ -43,45 +43,58 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
             try {
                 persist(entity);
             } catch (RepositoryException e) {
-                throw new RuntimeException(e);
+                SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
             }
         }).start();
     }
 
     @Transactional
-    protected synchronized T merge(T entity) {
+    protected synchronized T merge(T entity) throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
         T mergedEntity = entityManager.merge(entity);
 
         entityTransaction.commit();
+        entityManager.close();
         return mergedEntity;
     }
 
     public synchronized void update(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
         new Thread(() -> {
-            asyncCallBackObject.done(merge(entity));
+            try {
+                asyncCallBackObject.done(merge(entity));
+            } catch (RepositoryException e) {
+                SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
+            }
         }).start();
     }
 
     @Transactional
-    protected synchronized void remove(T entity) {
+    protected synchronized void remove(T entity) throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
         entityManager.remove(entityManager.merge(entity));
 
         entityTransaction.commit();
+        entityManager.close();
     }
 
     public void delete(T entity) {
         new Thread(() -> {
-            remove(entity);
+            try {
+                remove(entity);
+            } catch (RepositoryException e) {
+                SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
+            }
         }).start();
     }
 
     protected synchronized T find(int id) throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -106,6 +119,7 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
     }
 
     protected synchronized List<T> findAll() throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -117,6 +131,7 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         }
 
         entityTransaction.commit();
+        entityManager.close();
         return e;
     }
 
@@ -142,7 +157,7 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         }).start();
     }
 
-    public T getReference(UUID id) {
-        return entityManager.getReference(entityClass, id);
+    protected EntityManager getEntityManager() throws RepositoryException {
+        return emfLoader.getEntityManager();
     }
 }

@@ -1,5 +1,7 @@
 package fr.army.singularity.database.repository.impl;
 
+import fr.army.singularity.database.repository.EMFLoader;
+import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.database.repository.AbstractRepository;
 import jakarta.persistence.EntityManager;
@@ -7,8 +9,8 @@ import jakarta.persistence.EntityManager;
 import java.util.UUID;
 
 public class PlayerLoggerRepository extends AbstractRepository<PlayerLoggerEntity> {
-    public PlayerLoggerRepository(Class<PlayerLoggerEntity> entityClass, EntityManager entityManager) {
-        super(entityClass, entityManager);
+    public PlayerLoggerRepository(Class<PlayerLoggerEntity> entityClass, EMFLoader emfLoader) {
+        super(entityClass, emfLoader);
     }
 
    // @Nullable
@@ -26,7 +28,10 @@ public class PlayerLoggerRepository extends AbstractRepository<PlayerLoggerEntit
    //     executeAsyncQuery(() -> findByTeamUuid(uuid), callback);
    // }
 
-    public PlayerLoggerEntity findByPlayerUuid(UUID uuid) {
-        return entityManager.find(entityClass, uuid.toString());
+    public PlayerLoggerEntity findByPlayerUuid(UUID uuid) throws RepositoryException {
+        final EntityManager entityManager = getEntityManager();
+        final PlayerLoggerEntity res = entityManager.find(entityClass, uuid.toString());
+        entityManager.close();
+        return res;
     }
 }

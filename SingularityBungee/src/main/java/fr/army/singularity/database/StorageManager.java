@@ -1,5 +1,7 @@
 package fr.army.singularity.database;
 
+import fr.army.singularity.database.repository.EMFLoader;
+import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.database.repository.impl.ConnectionLoggerRepository;
 import fr.army.singularity.database.repository.impl.PlayerHostLoggerRepository;
 import fr.army.singularity.database.repository.impl.PlayerLoggerRepository;
@@ -11,19 +13,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class StorageManager {
 
-    private final EntityManager entityManager;
+    private final EMFLoader emfLoader;
     private final PlayerLoggerRepository playerLoggerRepository;
     private final ConnectionLoggerRepository connectionLoggerRepository;
     private final PlayerHostLoggerRepository playerHostLoggerRepository;
 
-    public StorageManager(@NotNull EntityManager entityManager) {
-        this.entityManager = entityManager;
-        this.playerLoggerRepository = new PlayerLoggerRepository(PlayerLoggerEntity.class, entityManager);
-        this.connectionLoggerRepository = new ConnectionLoggerRepository(ConnectionLoggerEntity.class, entityManager);
-        this.playerHostLoggerRepository = new PlayerHostLoggerRepository(PlayerHostLoggerEntity.class, entityManager);
+    public StorageManager(@NotNull EMFLoader emfLoader) throws RepositoryException {
+        this.emfLoader = emfLoader;
+        this.playerLoggerRepository = new PlayerLoggerRepository(PlayerLoggerEntity.class, emfLoader);
+        this.connectionLoggerRepository = new ConnectionLoggerRepository(ConnectionLoggerEntity.class, emfLoader);
+        this.playerHostLoggerRepository = new PlayerHostLoggerRepository(PlayerHostLoggerEntity.class, emfLoader);
     }
 
-    public void savePlayerLogger(PlayerLoggerEntity playerLoggerEntity) {
+    public void savePlayerLogger(PlayerLoggerEntity playerLoggerEntity) throws RepositoryException {
         if (playerLoggerRepository.findByPlayerUuid(playerLoggerEntity.getId()) == null) {
             playerLoggerRepository.insert(playerLoggerEntity);
         } else {
@@ -31,7 +33,7 @@ public class StorageManager {
         }
     }
 
-    public void savePlayerHostLogger(PlayerHostLoggerEntity playerHostLoggerEntity) {
+    public void savePlayerHostLogger(PlayerHostLoggerEntity playerHostLoggerEntity) throws RepositoryException {
         if (playerHostLoggerRepository.findByPlayerIdAndIp(playerHostLoggerEntity.getPlayer().getId(), playerHostLoggerEntity.getIp()) == null) {
             playerHostLoggerRepository.insert(playerHostLoggerEntity);
         } else {
@@ -43,7 +45,7 @@ public class StorageManager {
         connectionLoggerRepository.insert(connectionLoggerEntity);
     }
 
-    public void close() {
-        entityManager.close();
+    public EMFLoader getEmfLoader() {
+        return emfLoader;
     }
 }
