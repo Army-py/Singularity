@@ -4,8 +4,7 @@ import fr.army.singularity.entity.AbstractLoggerEntity;
 import jakarta.persistence.*;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializable {
@@ -14,10 +13,10 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
-    private Collection<ConnectionLoggerEntity> connections;
+    private List<ConnectionLoggerEntity> connections = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "player")
-    private PlayerHostLoggerEntity host;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    private List<PlayerHostLoggerEntity> hosts = new ArrayList<>();
 
 
     public static PlayerLoggerEntity fromSnapshot(PlayerLoggerSnapshot snapshot){
@@ -75,20 +74,20 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
         return name;
     }
 
-    public Collection<ConnectionLoggerEntity> getConnections() {
+    public List<ConnectionLoggerEntity> getConnections() {
         return connections;
     }
 
-    public void setConnections(Collection<ConnectionLoggerEntity> connections) {
+    public void setConnections(List<ConnectionLoggerEntity> connections) {
         this.connections = connections;
     }
 
-    public PlayerHostLoggerEntity getHost() {
-        return host;
+    public List<PlayerHostLoggerEntity> getHosts() {
+        return hosts;
     }
 
-    public PlayerLoggerEntity setHost(PlayerHostLoggerEntity host) {
-        this.host = host;
+    public PlayerLoggerEntity setHosts(List<PlayerHostLoggerEntity> hosts) {
+        this.hosts = hosts;
         return this;
     }
 
