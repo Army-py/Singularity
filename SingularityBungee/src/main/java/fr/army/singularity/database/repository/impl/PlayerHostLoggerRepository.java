@@ -5,6 +5,7 @@ import fr.army.singularity.database.repository.EMFLoader;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import jakarta.persistence.criteria.*;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerHostLoggerRepository extends AbstractRepository<PlayerHostLoggerEntity> {
     public PlayerHostLoggerRepository(Class<PlayerHostLoggerEntity> entityClass, EMFLoader emfLoader) {
@@ -41,20 +42,20 @@ public class PlayerHostLoggerRepository extends AbstractRepository<PlayerHostLog
     //     }, callback);
     // }
 
-    public void save(PlayerHostLoggerEntity playerHostLoggerEntity){
+    public void save(@NotNull PlayerHostLoggerEntity playerHostLoggerEntity){
         executeInTransaction(entityManager -> {
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<PlayerHostLoggerEntity> query = criteriaBuilder.createQuery(entityClass);
-            Root<PlayerHostLoggerEntity> playerHostRoot = query.from(entityClass);
+            final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            final CriteriaQuery<PlayerHostLoggerEntity> query = criteriaBuilder.createQuery(entityClass);
+            final Root<PlayerHostLoggerEntity> playerHostRoot = query.from(entityClass);
             query.select(playerHostRoot);
 
-            Join<PlayerHostLoggerEntity, PlayerLoggerEntity> playerJoin = playerHostRoot.join("player", JoinType.INNER);
+            final Join<PlayerHostLoggerEntity, PlayerLoggerEntity> playerJoin = playerHostRoot.join("player", JoinType.INNER);
 
             query.where(criteriaBuilder.and(
                     criteriaBuilder.equal(playerJoin.get("id"), playerHostLoggerEntity.getPlayer().getId()),
                     criteriaBuilder.equal(playerHostRoot.get("ip"), playerHostLoggerEntity.getIp())
             ));
-            PlayerHostLoggerEntity result = entityManager.createQuery(query).getSingleResult();
+            final PlayerHostLoggerEntity result = entityManager.createQuery(query).getSingleResult();
 
             if (result == null) {
                 entityManager.persist(playerHostLoggerEntity);
