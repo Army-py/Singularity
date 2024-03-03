@@ -3,9 +3,11 @@ package fr.army.singularity.entity.impl;
 import fr.army.singularity.entity.AbstractLoggerEntity;
 import jakarta.persistence.*;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 
 @Entity
