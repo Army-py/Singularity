@@ -55,23 +55,19 @@ public class SessionListener implements Listener {
                 .setPlayerHost(playerHostLoggerEntity)
                 .setPlayer(playerLoggerEntity)
         ;
-        playerHostLoggerEntity.getConnections().add(connectionLoggerEntity);
+        // playerHostLoggerEntity.getConnections().add(connectionLoggerEntity);
         playerLoggerEntity.getConnections().add(connectionLoggerEntity);
 
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
             asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
-            // asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+            asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
             // asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
         } else {
-            try {
-                storageManager.savePlayerLogger(playerLoggerEntity);
-                // storageManager.savePlayerHostLogger(playerHostLoggerEntity);
-                // storageManager.saveConnectionLogger(connectionLoggerEntity);
-            } catch (RepositoryException e) {
-                throw new RuntimeException(e);
-            }
+            storageManager.savePlayerLogger(playerLoggerEntity);
+            storageManager.savePlayerHostLogger(playerHostLoggerEntity);
+            // storageManager.saveConnectionLogger(connectionLoggerEntity);
         }
     }
 

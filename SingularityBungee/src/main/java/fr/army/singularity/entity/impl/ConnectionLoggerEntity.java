@@ -23,7 +23,7 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
     private String serverName;
     private int action;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     private PlayerHostLoggerEntity playerHost;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
