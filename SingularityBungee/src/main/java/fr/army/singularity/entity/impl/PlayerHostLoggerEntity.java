@@ -4,22 +4,22 @@ import fr.army.singularity.entity.AbstractLoggerEntity;
 import jakarta.persistence.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Serializable {
     @Id
-    @GeneratedValue
-    private Long id;
-
-    @Id
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private PlayerLoggerEntity player;
+
+    @Id
     private String ip;
 
+
+    // @PrePersist
+    // public void prePersist() {
+    //     this.id = UUID.randomUUID().toString();
+    // }
 
     public static PlayerHostLoggerEntity fromSnapshot(PlayerHostLoggerSnapshot snapshot) {
         return new PlayerHostLoggerEntity()
@@ -36,18 +36,18 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PlayerHostLoggerEntity that)) return false;
-        return getId().equals(that.getId()) && getPlayer().equals(that.getPlayer());
+        return getIp().equals(that.getIp()) && getPlayer().equals(that.getPlayer());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getPlayer().getId());
+        return Objects.hash(getIp(), getPlayer().getUuid());
     }
 
 
-    public Long getId() {
-        return id;
-    }
+    // public String getId() {
+    //     return id;
+    // }
 
     public PlayerLoggerEntity getPlayer() {
         return player;

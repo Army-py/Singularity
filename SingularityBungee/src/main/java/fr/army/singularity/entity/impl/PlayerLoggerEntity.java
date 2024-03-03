@@ -40,7 +40,7 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     }
 
     public PlayerLoggerSnapshot toSnapshot() {
-        return new PlayerLoggerSnapshot(getId(), getName());
+        return new PlayerLoggerSnapshot(getUuid(), getName());
     }
 
     @Override
@@ -61,8 +61,12 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
         return this;
     }
 
-    public UUID getId() {
+    public UUID getUuid() {
         return UUID.fromString(id);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public PlayerLoggerEntity setName(String name) {
