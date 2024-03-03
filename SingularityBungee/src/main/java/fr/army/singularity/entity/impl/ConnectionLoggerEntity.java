@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 
 import java.io.*;
 import java.util.Date;
+import java.util.UUID;
 
 
 @Entity
 public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date date;
     private double locX;
