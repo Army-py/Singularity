@@ -1,4 +1,4 @@
-package fr.army.singularity.database.repository.queue;
+package fr.army.singularity.database.queue;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;

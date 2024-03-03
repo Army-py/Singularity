@@ -1,4 +1,4 @@
-package fr.army.singularity.database.repository.queue;
+package fr.army.singularity.database.queue;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
