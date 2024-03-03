@@ -1,6 +1,5 @@
 package fr.army.singularity.database.repository;
 
-import fr.army.singularity.SingularityBungee;
 import fr.army.singularity.config.Config;
 import fr.army.singularity.config.StorageMode;
 import fr.army.singularity.database.repository.exception.RepositoryException;
@@ -10,6 +9,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
 import java.util.Properties;
 
 public class EMFLoader {
@@ -50,6 +50,10 @@ public class EMFLoader {
                 properties.put("jakarta.persistence.jdbc.driver", "org.sqlite.JDBC");
                 properties.put("jakarta.persistence.jdbc.url", "jdbc:sqlite:" + dataFolderPath + "/" + sqliteFile);
                 properties.put("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect");
+                properties.put("hibernate.connection.isolation", String.valueOf(Connection.TRANSACTION_SERIALIZABLE));
+                properties.put("jakarta.persistence.sharedCache.mode", "NONE");
+                properties.put("hibernate.connection.release_mode", "after_transaction");
+                // properties.put("hibernate.connection.pool_size", "1");
             }
 
 
@@ -66,6 +70,7 @@ public class EMFLoader {
 
     public EntityManager getEntityManager() throws RepositoryException {
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            System.out.println("EMFLoader.getEntityManager");
             return entityManagerFactory.createEntityManager();
         } else {
             throw new EntityManagerNotInitializedException();
