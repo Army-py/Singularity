@@ -12,4 +12,11 @@ public class AsyncDataSender {
             Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, ChannelRegistry.CHANNEL, data);
         });
     }
+
+    public void sendPluginMessage(byte[] data, long tickDelay) {
+        final SingularityPlugin plugin = SingularityPlugin.getPlugin();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            Bukkit.getOnlinePlayers().iterator().next().sendPluginMessage(plugin, ChannelRegistry.CHANNEL, data);
+        }, tickDelay);
+    }
 }
