@@ -7,8 +7,11 @@ import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
+import fr.army.singularity.network.reader.PlayerLoggerReader;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.scheduler.TaskScheduler;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 
@@ -32,21 +35,11 @@ public class DataReceiverListener implements Listener {
             return;
         }
 
-        final ByteArrayInputStream input = new ByteArrayInputStream(event.getData());
-        try {
-            final ObjectInputStream inputStream = new ObjectInputStream(input);
+        final PlayerLoggerReader reader = new PlayerLoggerReader(storageManager);
 
-            final Object object = inputStream.readObject();
-            if (object instanceof PlayerLoggerEntity playerEntity) {
-                storageManager.savePlayerLogger(playerEntity);
-            } else if (object instanceof PlayerHostLoggerEntity hostEntity) {
-                storageManager.savePlayerHostLogger(hostEntity);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        // storageManager.savePlayerLogger(PlayerLoggerEntity.readFromByte(event.getData()));
-        // System.out.println("PlayerLoggerEntity saved");
+        ProxyServer.getInstance().getScheduler().runAsync(
+                SingularityBungee.getPlugin(),
+                () -> reader.read(event.getData())
+        );
     }
 }
