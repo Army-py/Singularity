@@ -27,11 +27,23 @@ public class SessionListener implements Listener {
         this.storageManager = plugin.getStorageManager();
     }
 
-    // TODO : code factorization
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+
+        savePlayerLogger(player, 1);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+
+        savePlayerLogger(player, 0);
+    }
+
+
+    private void savePlayerLogger(Player player, int action) {
         final AsyncDataSender asyncDataSender = new AsyncDataSender();
 
         final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
@@ -47,7 +59,7 @@ public class SessionListener implements Listener {
 
         final Location location = player.getLocation();
         final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
-                .setAction(1)
+                .setAction(action)
                 .setLocX(location.getX())
                 .setLocY(location.getY())
                 .setLocZ(location.getZ())
@@ -55,58 +67,22 @@ public class SessionListener implements Listener {
                 .setPlayerHost(playerHostLoggerEntity)
                 .setPlayer(playerLoggerEntity)
         ;
-        // playerHostLoggerEntity.getConnections().add(connectionLoggerEntity);
+
         playerLoggerEntity.getConnections().add(connectionLoggerEntity);
 
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-            asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), 1);
-            asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), 1);
-            // asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
+            if (action == 1) {
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), 1);
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), 1);
+            } else {
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+            }
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
             storageManager.savePlayerHostLogger(playerHostLoggerEntity);
-            // storageManager.saveConnectionLogger(connectionLoggerEntity);
         }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        // final Player player = event.getPlayer();
-        // final AsyncDataSender asyncDataSender = new AsyncDataSender();
-        //
-        // final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
-        //         .setId(player.getUniqueId())
-        //         .setName(player.getName())
-        // ;
-        // asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
-        //
-        // final PlayerHostLoggerEntity playerHostLoggerEntity = new PlayerHostLoggerEntity()
-        //         .setPlayer(playerLoggerEntity)
-        //         .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
-        // ;
-        // asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
-        //
-        // final Location location = player.getLocation();
-        // final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
-        //         .setAction(0)
-        //         .setLocX(location.getX())
-        //         .setLocY(location.getY())
-        //         .setLocZ(location.getZ())
-        //         .setWorld(Objects.requireNonNull(location.getWorld()).getName())
-        //         .setPlayerHost(playerHostLoggerEntity)
-        // ;
-        //
-        // if (Config.storageMode.equals(StorageMode.BUNGEE)){
-        //     connectionLoggerEntity.setServerName(Config.serverName);
-        //
-        //     asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
-        // }
-        // else {
-        //     storageManager.savePlayerLogger(playerLoggerEntity);
-        //     storageManager.savePlayerHostLogger(playerHostLoggerEntity);
-        //     storageManager.saveConnectionLogger(connectionLoggerEntity);
-        // }
     }
 }
