@@ -3,7 +3,6 @@ package fr.army.singularity.database.repository.impl;
 import fr.army.singularity.database.repository.AbstractRepository;
 import fr.army.singularity.database.repository.EMFLoader;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
-import jakarta.persistence.EntityManager;
 
 public class ConnectionLoggerRepository extends AbstractRepository<ConnectionLoggerEntity> {
     public ConnectionLoggerRepository(Class<ConnectionLoggerEntity> entityClass, EMFLoader emfLoader) {

@@ -23,54 +23,9 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         this.emfLoader = emfLoader;
     }
 
-    // @Transactional
-    // protected synchronized void persist(T entity) throws RepositoryException {
-    //     final EntityManager entityManager = getEntityManager();
-    //     EntityTransaction entityTransaction = entityManager.getTransaction();
-    //     entityTransaction.begin();
-    //
-    //     entityManager.persist(entity);
-    //
-    //     entityTransaction.commit();
-    //     entityManager.close();
-    // }
-
-    // public synchronized void insert(T entity) {
-    //     new Thread(() -> {
-    //         try {
-    //             persist(entity);
-    //         } catch (RepositoryException e) {
-    //             SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
-    //         }
-    //     }).start();
-    // }
-
     public void insert(T entity) {
         executeInTransaction(entityManager -> entityManager.persist(entity));
     }
-
-    // @Transactional
-    // protected synchronized T merge(T entity) throws RepositoryException {
-    //     final EntityManager entityManager = getEntityManager();
-    //     EntityTransaction entityTransaction = entityManager.getTransaction();
-    //     entityTransaction.begin();
-    //
-    //     T mergedEntity = entityManager.merge(entity);
-    //
-    //     entityTransaction.commit();
-    //     entityManager.close();
-    //     return mergedEntity;
-    // }
-
-    // public synchronized void update(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
-    //     new Thread(() -> {
-    //         try {
-    //             asyncCallBackObject.done(merge(entity));
-    //         } catch (RepositoryException e) {
-    //             SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
-    //         }
-    //     }).start();
-    // }
 
     public void update(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
         executeInTransaction(entityManager -> {
@@ -81,54 +36,9 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
         });
     }
 
-    // @Transactional
-    // protected synchronized void remove(T entity) throws RepositoryException {
-    //     final EntityManager entityManager = getEntityManager();
-    //     EntityTransaction entityTransaction = entityManager.getTransaction();
-    //     entityTransaction.begin();
-    //
-    //     entityManager.remove(entityManager.merge(entity));
-    //
-    //     entityTransaction.commit();
-    //     entityManager.close();
-    // }
-
-    // public void delete(T entity) {
-    //     new Thread(() -> {
-    //         try {
-    //             remove(entity);
-    //         } catch (RepositoryException e) {
-    //             SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
-    //         }
-    //     }).start();
-    // }
-
     public void delete(T entity) {
         executeInTransaction(entityManager -> entityManager.remove(entityManager.merge(entity)));
     }
-
-    // @Nullable
-    // protected synchronized T find(int id) throws RepositoryException {
-    //     final EntityManager entityManager = getEntityManager();
-    //     EntityTransaction entityTransaction = entityManager.getTransaction();
-    //     entityTransaction.begin();
-    //
-    //     T e = entityManager.find(entityClass, id);
-    //
-    //     entityTransaction.commit();
-    //     entityManager.close();
-    //     return e;
-    // }
-
-    // public void find(int id, AsyncCallBackObject<T> asyncCallBackObject) {
-    //     new Thread(() -> {
-    //         try {
-    //             asyncCallBackObject.done(find(id));
-    //         } catch (RepositoryException e) {
-    //             SingularityBungee.getPlugin().getLogger().severe(e.getMessage());
-    //         }
-    //     }).start();
-    // }
 
     public void find(int id, AsyncCallBackObject<T> asyncCallBackObject) {
         executeInTransaction(entityManager -> {
@@ -138,56 +48,6 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
             }
         });
     }
-
-    // protected synchronized List<T> findAll() throws RepositoryException {
-    //     final EntityManager entityManager = getEntityManager();
-    //     EntityTransaction entityTransaction = entityManager.getTransaction();
-    //     entityTransaction.begin();
-    //
-    //     CriteriaQuery<T> cq = entityManager.getCriteriaBuilder().createQuery(entityClass);
-    //     cq.select(cq.from(entityClass));
-    //     List<T> e = entityManager.createQuery(cq).getResultList();
-    //
-    //     entityTransaction.commit();
-    //     entityManager.close();
-    //     return e;
-    // }
-
-    // public void findAll(AsyncCallBackObjectList<T> asyncCallBackObjectList) {
-    //     new Thread(() -> {
-    //         try {
-    //             asyncCallBackObjectList.done(findAll());
-    //         } catch (RepositoryException e) {
-    //             SingularityBungee.getPlugin().getLogger().severe(e.getMessage()); // TODO : error with bukkit part
-    //         }
-    //     }).start();
-    // }
-
-    // public void findAll(AsyncCallBackObjectList<T> asyncCallBackObjectList) {
-    //     executeInTransaction(entityManager -> {
-    //         List<T> e = null;
-    //         try {
-    //             e = findAll();
-    //         } catch (RepositoryException ex) {
-    //             throw new RuntimeException(ex);
-    //         }
-    //         if (asyncCallBackObjectList != null) {
-    //             asyncCallBackObjectList.done(e);
-    //         }
-    //     });
-    // }
-
-    // protected void executeAsyncQuery(Supplier<T> supplier, AsyncCallBackObject<T> asyncCallBackObject){
-    //     new Thread(() -> {
-    //         asyncCallBackObject.done(supplier.get());
-    //     }).start();
-    // }
-    //
-    // protected void executeAsyncQueryList(Supplier<List<T>> supplier, AsyncCallBackObjectList<T> asyncCallBackObjectList){
-    //     new Thread(() -> {
-    //         asyncCallBackObjectList.done(supplier.get());
-    //     }).start();
-    // }
 
     protected void executeAsyncQuery(Supplier<T> supplier, AsyncCallBackObject<T> asyncCallBackObject){
         executeInTransaction(entityManager -> {
@@ -216,13 +76,5 @@ public abstract class AbstractRepository<T extends AbstractLoggerEntity> {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
-    }
-
-    // protected EntityManager getEntityManager() throws RepositoryException {
-    //     return emfLoader.getEntityManager();
-    // }
-
-    public void shutdownQueueManager() {
-        DatabaseTaskQueueManager.shutdown();
     }
 }
