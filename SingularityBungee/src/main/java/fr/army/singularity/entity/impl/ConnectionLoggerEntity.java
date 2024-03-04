@@ -35,23 +35,6 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
         this.date = new Date();
     }
 
-    public static ConnectionLoggerEntity fromSnapshot(ConnectionLoggerSnapshot snapshot) {
-        return new ConnectionLoggerEntity()
-                .setDate(snapshot.date())
-                .setLocX(snapshot.locX())
-                .setLocY(snapshot.locY())
-                .setLocZ(snapshot.locZ())
-                .setWorld(snapshot.world())
-                .setServerName(snapshot.serverName())
-                .setAction(snapshot.action())
-                .setPlayerHost(PlayerHostLoggerEntity.fromSnapshot(snapshot.playerHost()))
-                .setPlayer(PlayerLoggerEntity.fromSnapshot(snapshot.player()));
-    }
-
-    public ConnectionLoggerSnapshot toSnapshot() {
-        return new ConnectionLoggerSnapshot(getDate(), getLocX(), getLocY(), getLocZ(), getWorld(), getServerName(), getAction(), getPlayerHost().toSnapshot(), getPlayer().toSnapshot());
-    }
-
 
     public Long getId() {
         return id;
@@ -136,44 +119,5 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
     public ConnectionLoggerEntity setPlayerHost(PlayerHostLoggerEntity playerHost) {
         this.playerHost = playerHost;
         return this;
-    }
-
-
-    public record ConnectionLoggerSnapshot(Date date, double locX, double locY, double locZ, String world,
-                                           String serverName, int action, PlayerHostLoggerEntity.PlayerHostLoggerSnapshot playerHost,
-                                           PlayerLoggerEntity.PlayerLoggerSnapshot player) implements Serializable {
-
-        public byte[] writeToByte() {
-            final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-            final ObjectOutputStream outDataStream;
-            try {
-                outDataStream = new ObjectOutputStream(outByteStream);
-                outDataStream.writeObject(this);
-                outDataStream.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return outByteStream.toByteArray();
-        }
-
-        // public byte[] writeToByte() {
-        //     final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-        //     final DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-        //     try {
-        //         outDataStream.writeLong(date.getTime());
-        //         outDataStream.writeDouble(locX);
-        //         outDataStream.writeDouble(locY);
-        //         outDataStream.writeDouble(locZ);
-        //         outDataStream.writeUTF(world);
-        //         outDataStream.writeUTF(serverName);
-        //         outDataStream.writeInt(action);
-        //         outDataStream.write(playerHost.writeToByte());
-        //         outDataStream.write(player.writeToByte());
-        //         outDataStream.flush();
-        //     } catch (IOException e) {
-        //         throw new RuntimeException(e);
-        //     }
-        //     return outByteStream.toByteArray();
-        // }
     }
 }

@@ -19,30 +19,6 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     private List<PlayerHostLoggerEntity> hosts = new ArrayList<>();
 
 
-    public static PlayerLoggerEntity fromSnapshot(PlayerLoggerSnapshot snapshot){
-        return new PlayerLoggerEntity()
-                .setId(snapshot.id())
-                .setName(snapshot.name());
-    }
-
-    public static PlayerLoggerEntity readFromByte(byte[] data) {
-        final ByteArrayInputStream inByteStream = new ByteArrayInputStream(data);
-        final DataInputStream inDataStream = new DataInputStream(inByteStream);
-        try {
-            final UUID id = UUID.fromString(inDataStream.readUTF());
-            final String name = inDataStream.readUTF();
-            return new PlayerLoggerEntity()
-                    .setId(id)
-                    .setName(name);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public PlayerLoggerSnapshot toSnapshot() {
-        return new PlayerLoggerSnapshot(getUuid(), getName());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,7 +30,6 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     public int hashCode() {
         return getId().hashCode();
     }
-
 
     public PlayerLoggerEntity setId(UUID id) {
         this.id = id.toString();
@@ -93,35 +68,5 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     public PlayerLoggerEntity setHosts(List<PlayerHostLoggerEntity> hosts) {
         this.hosts = hosts;
         return this;
-    }
-
-
-    public record PlayerLoggerSnapshot(UUID id, String name) implements Serializable {
-
-        public byte[] writeToByte() {
-            final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-            final ObjectOutputStream outDataStream;
-            try {
-                outDataStream = new ObjectOutputStream(outByteStream);
-                outDataStream.writeObject(this);
-                outDataStream.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return outByteStream.toByteArray();
-        }
-
-        // public byte[] writeToByte() {
-        //     final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-        //     final DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-        //     try {
-        //         outDataStream.writeUTF(id.toString());
-        //         outDataStream.writeUTF(name);
-        //         outDataStream.flush();
-        //     } catch (IOException e) {
-        //         throw new RuntimeException(e);
-        //     }
-        //     return outByteStream.toByteArray();
-        // }
     }
 }

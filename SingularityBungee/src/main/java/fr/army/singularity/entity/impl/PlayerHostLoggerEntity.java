@@ -16,22 +16,6 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     private String ip;
 
 
-    // @PrePersist
-    // public void prePersist() {
-    //     this.id = UUID.randomUUID().toString();
-    // }
-
-    public static PlayerHostLoggerEntity fromSnapshot(PlayerHostLoggerSnapshot snapshot) {
-        return new PlayerHostLoggerEntity()
-                .setIp(snapshot.ip())
-                .setPlayer(PlayerLoggerEntity.fromSnapshot(snapshot.player()));
-    }
-
-    public PlayerHostLoggerSnapshot toSnapshot() {
-        return new PlayerHostLoggerSnapshot(getIp(), getPlayer().toSnapshot());
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,11 +27,6 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     public int hashCode() {
         return Objects.hash(getIp(), getPlayer().getUuid());
     }
-
-
-    // public String getId() {
-    //     return id;
-    // }
 
     public PlayerLoggerEntity getPlayer() {
         return player;
@@ -76,35 +55,5 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
     public PlayerHostLoggerEntity setIp(String ip) {
         this.ip = ip;
         return this;
-    }
-
-
-    public record PlayerHostLoggerSnapshot(String ip, PlayerLoggerEntity.PlayerLoggerSnapshot player) implements Serializable {
-
-        public byte[] writeToByte() {
-            final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-            final ObjectOutputStream outDataStream;
-            try {
-                outDataStream = new ObjectOutputStream(outByteStream);
-                outDataStream.writeObject(this);
-                outDataStream.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return outByteStream.toByteArray();
-        }
-
-        // public byte[] writeToByte() {
-        //     final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
-        //     final DataOutputStream outDataStream = new DataOutputStream(outByteStream);
-        //     try {
-        //         outDataStream.writeUTF(ip);
-        //         outDataStream.write(player.writeToByte());
-        //         outDataStream.flush();
-        //     } catch (IOException e) {
-        //         throw new RuntimeException(e);
-        //     }
-        //     return outByteStream.toByteArray();
-        // }
     }
 }
