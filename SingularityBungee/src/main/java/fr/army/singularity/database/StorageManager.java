@@ -1,7 +1,6 @@
 package fr.army.singularity.database;
 
 import fr.army.singularity.database.repository.EMFLoader;
-import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.database.repository.impl.BlockLoggerRepository;
 import fr.army.singularity.database.repository.impl.PlayerHostLoggerRepository;
 import fr.army.singularity.database.repository.impl.PlayerLoggerRepository;

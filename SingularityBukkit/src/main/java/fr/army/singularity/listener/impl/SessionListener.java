@@ -73,8 +73,8 @@ public class SessionListener implements Listener {
             connectionLoggerEntity.setServerName(Config.serverName);
 
             if (action == 1) {
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 1);
-                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 1);
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
             } else {
                 asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
                 asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);

@@ -55,13 +55,7 @@ public class SingularityPlugin extends JavaPlugin {
             emfLoader = new EMFLoader();
             emfLoader.setupEntityManagerFactory(getDataFolder().getPath());
 
-            try {
-                storageManager = new StorageManager(emfLoader);
-            } catch (RepositoryException e) {
-                getLogger().severe("An error occurred while setting up the storage manager: " + e.getMessage());
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
+            storageManager = new StorageManager(emfLoader);
         }
 
         listenerLoader = new ListenerLoader();
