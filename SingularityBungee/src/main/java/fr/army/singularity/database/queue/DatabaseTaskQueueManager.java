@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class DatabaseTaskQueueManager {
 
-    private static final int QUEUE_CAPACITY = 50;
+    private static final int QUEUE_CAPACITY = 99;
     private static final BlockingQueue<DatabaseTask> taskQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 

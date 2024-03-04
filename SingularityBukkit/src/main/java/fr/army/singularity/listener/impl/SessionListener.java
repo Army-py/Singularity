@@ -61,8 +61,15 @@ public class SessionListener implements Listener {
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-            asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
-            asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+            new Thread(() -> {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+            }).start();
             // asyncDataSender.sendPluginMessage(connectionLoggerEntity.writeToByte());
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
