@@ -13,13 +13,11 @@ public class StorageManager {
     private final EMFLoader emfLoader;
     private final PlayerLoggerRepository playerLoggerRepository;
     private final PlayerHostLoggerRepository playerHostLoggerRepository;
-    // private final ConnectionLoggerRepository connectionLoggerRepository;
 
     public StorageManager(@NotNull EMFLoader emfLoader) throws RepositoryException {
         this.emfLoader = emfLoader;
         this.playerLoggerRepository = new PlayerLoggerRepository(PlayerLoggerEntity.class, emfLoader);
         this.playerHostLoggerRepository = new PlayerHostLoggerRepository(PlayerHostLoggerEntity.class, emfLoader);
-        // this.connectionLoggerRepository = new ConnectionLoggerRepository(ConnectionLoggerEntity.class, emfLoader);
     }
 
     public void savePlayerLogger(PlayerLoggerEntity playerLoggerEntity) {
@@ -28,13 +26,5 @@ public class StorageManager {
 
     public void savePlayerHostLogger(PlayerHostLoggerEntity playerHostLoggerEntity) {
         playerHostLoggerRepository.save(playerHostLoggerEntity);
-    }
-    //
-    // public void saveConnectionLogger(ConnectionLoggerEntity connectionLoggerEntity) {
-    //     connectionLoggerRepository.insert(connectionLoggerEntity);
-    // }
-
-    public EMFLoader getEmfLoader() {
-        return emfLoader;
     }
 }
