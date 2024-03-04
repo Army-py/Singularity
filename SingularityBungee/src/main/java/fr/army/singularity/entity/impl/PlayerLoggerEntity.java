@@ -18,6 +18,9 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
     private List<PlayerHostLoggerEntity> hosts = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    private List<BlockLoggerEntity> interactedBlocks = new ArrayList<>();
+
 
     @Override
     public boolean equals(Object o) {
@@ -68,5 +71,13 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     public PlayerLoggerEntity setHosts(List<PlayerHostLoggerEntity> hosts) {
         this.hosts = hosts;
         return this;
+    }
+
+    public List<BlockLoggerEntity> getInteractedBlocks() {
+        return interactedBlocks;
+    }
+
+    public void setInteractedBlocks(List<BlockLoggerEntity> interactedBlocks) {
+        this.interactedBlocks = interactedBlocks;
     }
 }

@@ -10,12 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class StorageManager {
 
-    private final EMFLoader emfLoader;
     private final PlayerLoggerRepository playerLoggerRepository;
     private final PlayerHostLoggerRepository playerHostLoggerRepository;
 
-    public StorageManager(@NotNull EMFLoader emfLoader) throws RepositoryException {
-        this.emfLoader = emfLoader;
+    public StorageManager(@NotNull EMFLoader emfLoader) {
         this.playerLoggerRepository = new PlayerLoggerRepository(PlayerLoggerEntity.class, emfLoader);
         this.playerHostLoggerRepository = new PlayerHostLoggerRepository(PlayerHostLoggerEntity.class, emfLoader);
     }
