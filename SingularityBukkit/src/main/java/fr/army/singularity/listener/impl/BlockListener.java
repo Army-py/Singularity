@@ -7,13 +7,16 @@ import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.entity.action.BlockAction;
 import fr.army.singularity.entity.impl.BlockLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
+import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.AsyncDataSender;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockListener implements Listener {
 
@@ -32,7 +35,7 @@ public class BlockListener implements Listener {
         saveBlockLogger(player, block, BlockAction.BREAK);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
@@ -40,17 +43,17 @@ public class BlockListener implements Listener {
         saveBlockLogger(player, block, BlockAction.PLACE);
     }
 
+    @EventHandler
+    public void onBlockBurn(BlockBurnEvent event) {
+        final Block block = event.getBlock();
 
-    private void saveBlockLogger(Player player, Block block, BlockAction action) {
+        saveBlockLogger(null, block, BlockAction.BURN);
+    }
+
+    private void saveBlockLogger(@Nullable Player player, Block block, BlockAction action) {
         final AsyncDataSender asyncDataSender = new AsyncDataSender();
 
-        final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
-                .setId(player.getUniqueId())
-                .setName(player.getName())
-        ;
-
         final BlockLoggerEntity blockLoggerEntity = new BlockLoggerEntity()
-                .setPlayer(playerLoggerEntity)
                 .setWorld(block.getWorld().getName())
                 .setLocX(block.getX())
                 .setLocY(block.getY())
@@ -58,13 +61,26 @@ public class BlockListener implements Listener {
                 .setBlock(block.getType().name())
                 .setAction(action)
         ;
-        playerLoggerEntity.getInteractedBlocks().add(blockLoggerEntity);
 
+        if (player != null) {
+            final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
+                    .setId(player.getUniqueId())
+                    .setName(player.getName())
+            ;
+            blockLoggerEntity.setPlayer(playerLoggerEntity);
+            playerLoggerEntity.getInteractedBlocks().add(blockLoggerEntity);
 
-        if (Config.storageMode.equals(StorageMode.BUNGEE)){
-            asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
+            if (Config.storageMode.equals(StorageMode.BUNGEE)){
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.BLOCK_CHANNEL);
+            } else {
+                storageManager.savePlayerLogger(playerLoggerEntity);
+            }
         } else {
-            storageManager.savePlayerLogger(playerLoggerEntity);
+            if (Config.storageMode.equals(StorageMode.BUNGEE)){
+                asyncDataSender.sendPluginMessage(blockLoggerEntity.writeToByte(), ChannelRegistry.BLOCK_CHANNEL);
+            } else {
+                storageManager.saveBlockLogger(blockLoggerEntity);
+            }
         }
     }
 }

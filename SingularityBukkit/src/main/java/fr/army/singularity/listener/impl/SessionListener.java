@@ -7,6 +7,7 @@ import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
+import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.AsyncDataSender;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -72,11 +73,11 @@ public class SessionListener implements Listener {
             connectionLoggerEntity.setServerName(Config.serverName);
 
             if (action == 1) {
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), 1);
-                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), 1);
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 1);
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 1);
             } else {
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte());
-                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte());
+                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
+                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
             }
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
