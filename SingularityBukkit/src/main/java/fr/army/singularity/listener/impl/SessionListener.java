@@ -8,7 +8,9 @@ import fr.army.singularity.entity.impl.ConnectionLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
-import fr.army.singularity.network.task.AsyncDataSender;
+import fr.army.singularity.network.queue.DataSenderQueueManager;
+import fr.army.singularity.network.task.DataSender;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,6 +33,9 @@ public class SessionListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
+        if (DataSenderQueueManager.isPaused())
+            DataSenderQueueManager.resume();
+
         savePlayerLogger(player, 1);
     }
 
@@ -38,12 +43,15 @@ public class SessionListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
 
+        if (Bukkit.getOnlinePlayers().size() == 1)
+            DataSenderQueueManager.pause();
+
         savePlayerLogger(player, 0);
     }
 
 
     private void savePlayerLogger(Player player, int action) {
-        final AsyncDataSender asyncDataSender = new AsyncDataSender();
+        final DataSender dataSender = new DataSender();
 
         final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
                 .setId(player.getUniqueId())
@@ -72,13 +80,8 @@ public class SessionListener implements Listener {
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-            if (action == 1) {
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
-                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
-            } else {
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
-                asyncDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
-            }
+            dataSender.send(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
+            dataSender.send(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
             storageManager.savePlayerHostLogger(playerHostLoggerEntity);

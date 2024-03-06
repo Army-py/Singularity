@@ -5,9 +5,9 @@ import fr.army.singularity.config.ConfigLoader;
 import fr.army.singularity.config.StorageMode;
 import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.database.repository.EMFLoader;
-import fr.army.singularity.database.repository.exception.RepositoryException;
 import fr.army.singularity.listener.ListenerLoader;
 import fr.army.singularity.network.channel.ChannelRegistry;
+import fr.army.singularity.network.queue.DataSenderQueueManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -69,6 +69,8 @@ public class SingularityPlugin extends JavaPlugin {
         if (emfLoader != null) {
             EMFLoader.closeEntityManagerFactory();
         }
+
+        DataSenderQueueManager.shutdown();
 
         getLogger().info("SingularityPlugin has been disabled!");
     }
