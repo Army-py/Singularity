@@ -9,7 +9,7 @@ import fr.army.singularity.entity.impl.PlayerHostLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.queue.DataSenderQueueManager;
-import fr.army.singularity.network.task.DataSender;
+import fr.army.singularity.network.task.QueuedDataSender;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -51,7 +51,7 @@ public class SessionListener implements Listener {
 
 
     private void savePlayerLogger(Player player, int action) {
-        final DataSender dataSender = new DataSender();
+        final QueuedDataSender queuedDataSender = new QueuedDataSender();
 
         final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
                 .setId(player.getUniqueId())
@@ -80,8 +80,8 @@ public class SessionListener implements Listener {
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-            dataSender.send(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
-            dataSender.send(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
+            queuedDataSender.send(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
+            queuedDataSender.send(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 2);
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
             storageManager.savePlayerHostLogger(playerHostLoggerEntity);
