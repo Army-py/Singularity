@@ -5,6 +5,7 @@ import fr.army.singularity.entity.action.BlockAction;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -18,10 +19,16 @@ public class BlockLoggerEntity extends AbstractLoggerEntity implements Serializa
     private int locZ;
     private String block;
     private String action;
+    private Date date;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private PlayerLoggerEntity player;
 
+
+    @PrePersist
+    public void prePersist() {
+        date = new Date();
+    }
 
     public Long getId() {
         return id;
@@ -78,6 +85,15 @@ public class BlockLoggerEntity extends AbstractLoggerEntity implements Serializa
 
     public BlockLoggerEntity setAction(BlockAction action) {
         this.action = action.name();
+        return this;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public BlockLoggerEntity setDate(Date date) {
+        this.date = date;
         return this;
     }
 
