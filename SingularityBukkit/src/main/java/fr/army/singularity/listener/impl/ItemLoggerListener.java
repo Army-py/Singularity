@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemLoggerListener implements Listener {
@@ -83,14 +84,16 @@ public class ItemLoggerListener implements Listener {
     private void saveItemLogger(@Nullable Player player, Item item, EntityType entityType, ItemAction action) {
         final QueuedDataSender queuedDataSender = new QueuedDataSender();
         final ItemStackSerializer itemStackSerializer = new ItemStackSerializer();
+        final ItemStack itemStack = item.getItemStack();
 
         final ItemLoggerEntity itemLoggerEntity = new ItemLoggerEntity()
                 .setWorld(item.getWorld().getName())
                 .setLocX(item.getLocation().getBlockX())
                 .setLocY(item.getLocation().getBlockY())
                 .setLocZ(item.getLocation().getBlockZ())
-                .setItemType(item.getItemStack().getType().name())
-                .setItemData(itemStackSerializer.serializeToByte(item.getItemStack()))
+                .setItemType(itemStack.getType().name())
+                .setAmount(itemStack.getAmount())
+                .setItemData(itemStackSerializer.serializeToByte(itemStack))
                 .setAction(action.name())
                 .setEntity(entityType.name())
         ;
@@ -104,13 +107,13 @@ public class ItemLoggerListener implements Listener {
             playerLoggerEntity.getInteractedItems().add(itemLoggerEntity);
 
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                queuedDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
+                queuedDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 5);
             } else {
                 storageManager.savePlayerLogger(playerLoggerEntity);
             }
         } else {
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                queuedDataSender.sendPluginMessage(itemLoggerEntity.writeToByte(), ChannelRegistry.ITEM_CHANNEL);
+                queuedDataSender.sendPluginMessage(itemLoggerEntity.writeToByte(), ChannelRegistry.ITEM_CHANNEL, 5);
             } else {
                 storageManager.saveItemLogger(itemLoggerEntity);
             }

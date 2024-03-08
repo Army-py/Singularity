@@ -16,7 +16,7 @@ public class DataSenderQueueManager {
     private static final Condition unpaused = pauseLock.newCondition();
     private static volatile boolean isPaused = false;
 
-    private static ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     static {
         startService();

@@ -17,7 +17,7 @@ public class ItemLoggerEntity extends AbstractLoggerEntity implements Serializab
     private int locY;
     private int locZ;
     private String itemType;
-    private int itemAmount;
+    private int amount;
     private byte[] itemData;
     private String action;
     private Date date;
@@ -84,12 +84,12 @@ public class ItemLoggerEntity extends AbstractLoggerEntity implements Serializab
         return this;
     }
 
-    public int getItemAmount() {
-        return itemAmount;
+    public int getAmount() {
+        return amount;
     }
 
-    public ItemLoggerEntity setItemAmount(int itemAmount) {
-        this.itemAmount = itemAmount;
+    public ItemLoggerEntity setAmount(int itemAmount) {
+        this.amount = itemAmount;
         return this;
     }
 
