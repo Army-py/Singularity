@@ -4,6 +4,7 @@ import fr.army.singularity.SingularityBungee;
 import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.reader.BlockLoggerReader;
+import fr.army.singularity.network.reader.ItemLoggerReader;
 import fr.army.singularity.network.reader.PlayerLoggerReader;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
@@ -42,6 +43,21 @@ public class DataReceiverListener implements Listener {
         }
 
         final BlockLoggerReader reader = new BlockLoggerReader(storageManager);
+
+        ProxyServer.getInstance().getScheduler().runAsync(
+                SingularityBungee.getPlugin(),
+                () -> reader.read(event.getData())
+        );
+    }
+
+    @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onItemDataReceived(PluginMessageEvent event) {
+        if (!ChannelRegistry.ITEM_CHANNEL.equals(event.getTag())){
+            return;
+        }
+
+        final ItemLoggerReader reader = new ItemLoggerReader(storageManager);
 
         ProxyServer.getInstance().getScheduler().runAsync(
                 SingularityBungee.getPlugin(),
