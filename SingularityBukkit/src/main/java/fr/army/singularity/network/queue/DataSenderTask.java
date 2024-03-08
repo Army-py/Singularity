@@ -1,8 +1,6 @@
 package fr.army.singularity.network.queue;
 
-import fr.army.singularity.network.task.AsyncDataSender;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
+import fr.army.singularity.network.sender.AsyncDataSender;
 
 import java.util.function.Consumer;
 

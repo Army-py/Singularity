@@ -1,4 +1,4 @@
-package fr.army.singularity.network.task;
+package fr.army.singularity.network.sender;
 
 import fr.army.singularity.network.queue.DataSenderQueueManager;
 import fr.army.singularity.network.queue.DataSenderTask;

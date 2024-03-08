@@ -1,7 +1,6 @@
-package fr.army.singularity.network.task;
+package fr.army.singularity.network.sender;
 
 import fr.army.singularity.SingularityPlugin;
-import fr.army.singularity.network.channel.ChannelRegistry;
 import org.bukkit.Bukkit;
 
 public class AsyncDataSender {
