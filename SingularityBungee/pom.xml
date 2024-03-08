@@ -39,10 +39,6 @@
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
-                <directory>../</directory>
-                <targetPath>META-INF</targetPath>
-            </resource>
-            <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
@@ -62,6 +58,11 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
+                                <filter>
+                                    <excludes>
+                                        <exclude>.idea/</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                         </configuration>
                     </execution>
