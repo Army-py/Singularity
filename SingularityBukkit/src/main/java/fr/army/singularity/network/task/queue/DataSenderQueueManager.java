@@ -1,4 +1,4 @@
-package fr.army.singularity.network.queue;
+package fr.army.singularity.network.task.queue;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;

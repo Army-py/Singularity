@@ -8,7 +8,7 @@ import fr.army.singularity.entity.action.ItemAction;
 import fr.army.singularity.entity.impl.ItemLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
-import fr.army.singularity.network.sender.QueuedDataSender;
+import fr.army.singularity.network.task.sender.QueuedDataSender;
 import fr.army.singularity.serializer.ItemStackSerializer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

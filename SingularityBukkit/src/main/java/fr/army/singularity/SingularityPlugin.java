@@ -7,7 +7,7 @@ import fr.army.singularity.database.StorageManager;
 import fr.army.singularity.database.repository.EMFLoader;
 import fr.army.singularity.listener.ListenerLoader;
 import fr.army.singularity.network.channel.ChannelRegistry;
-import fr.army.singularity.network.queue.DataSenderQueueManager;
+import fr.army.singularity.network.task.queue.DataSenderQueueManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 

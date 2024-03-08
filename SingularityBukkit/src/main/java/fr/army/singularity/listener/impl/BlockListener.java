@@ -8,7 +8,7 @@ import fr.army.singularity.entity.action.BlockAction;
 import fr.army.singularity.entity.impl.BlockLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
-import fr.army.singularity.network.sender.AsyncDataSender;
+import fr.army.singularity.network.task.sender.AsyncDataSender;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

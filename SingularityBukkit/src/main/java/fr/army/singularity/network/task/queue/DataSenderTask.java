@@ -1,6 +1,6 @@
-package fr.army.singularity.network.queue;
+package fr.army.singularity.network.task.queue;
 
-import fr.army.singularity.network.sender.AsyncDataSender;
+import fr.army.singularity.network.task.sender.AsyncDataSender;
 
 import java.util.function.Consumer;
 

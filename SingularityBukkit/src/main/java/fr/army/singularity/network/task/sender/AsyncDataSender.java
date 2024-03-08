@@ -1,4 +1,4 @@
-package fr.army.singularity.network.sender;
+package fr.army.singularity.network.task.sender;
 
 import fr.army.singularity.SingularityPlugin;
 import org.bukkit.Bukkit;

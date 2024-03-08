@@ -1,7 +1,7 @@
-package fr.army.singularity.network.sender;
+package fr.army.singularity.network.task.sender;
 
-import fr.army.singularity.network.queue.DataSenderQueueManager;
-import fr.army.singularity.network.queue.DataSenderTask;
+import fr.army.singularity.network.task.queue.DataSenderQueueManager;
+import fr.army.singularity.network.task.queue.DataSenderTask;
 
 public class QueuedDataSender {
 
