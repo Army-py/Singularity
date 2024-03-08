@@ -5,7 +5,7 @@ import fr.army.singularity.network.queue.DataSenderTask;
 
 public class QueuedDataSender {
 
-    public void send(byte[] data, String channel) {
+    public void sendPluginMessage(byte[] data, String channel) {
         try {
             final DataSenderTask task = new DataSenderTask(new AsyncDataSender(), (action) -> action.sendPluginMessage(data, channel));
             DataSenderQueueManager.enqueueTask(task);
@@ -15,7 +15,7 @@ public class QueuedDataSender {
         }
     }
 
-    public void send(byte[] data, String channel, long tickDelay) {
+    public void sendPluginMessage(byte[] data, String channel, long tickDelay) {
         try {
             final DataSenderTask task = new DataSenderTask(new AsyncDataSender(), (action) -> action.sendPluginMessage(data, channel, tickDelay));
             DataSenderQueueManager.enqueueTask(task);
