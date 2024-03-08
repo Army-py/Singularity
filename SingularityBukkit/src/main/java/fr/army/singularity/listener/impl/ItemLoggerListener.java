@@ -47,7 +47,6 @@ public class ItemLoggerListener implements Listener {
 
     @EventHandler
     public void onEntityDropItem(EntityDropItemEvent event) {
-        System.out.println("Item dropped");
         final Entity entity = event.getEntity();
         final EntityType entityType = entity.getType();
         final Item item = event.getItemDrop();
