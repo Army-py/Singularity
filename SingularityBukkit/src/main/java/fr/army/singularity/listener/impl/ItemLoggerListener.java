@@ -107,13 +107,13 @@ public class ItemLoggerListener implements Listener {
             playerLoggerEntity.getInteractedItems().add(itemLoggerEntity);
 
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                queuedDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 5);
+                queuedDataSender.sendPluginMessage(playerLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 5);
             } else {
                 storageManager.savePlayerLogger(playerLoggerEntity);
             }
         } else {
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                queuedDataSender.sendPluginMessage(itemLoggerEntity.writeToByte(), ChannelRegistry.ITEM_CHANNEL, 5);
+                queuedDataSender.sendPluginMessage(itemLoggerEntity, ChannelRegistry.ITEM_CHANNEL, 5);
             } else {
                 storageManager.saveItemLogger(itemLoggerEntity);
             }

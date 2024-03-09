@@ -71,13 +71,13 @@ public class BlockListener implements Listener {
             playerLoggerEntity.getInteractedBlocks().add(blockLoggerEntity);
 
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                asyncDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL);
+                asyncDataSender.sendPluginMessage(playerLoggerEntity, ChannelRegistry.PLAYER_CHANNEL);
             } else {
                 storageManager.savePlayerLogger(playerLoggerEntity);
             }
         } else {
             if (Config.storageMode.equals(StorageMode.BUNGEE)){
-                asyncDataSender.sendPluginMessage(blockLoggerEntity.writeToByte(), ChannelRegistry.BLOCK_CHANNEL);
+                asyncDataSender.sendPluginMessage(blockLoggerEntity, ChannelRegistry.BLOCK_CHANNEL);
             } else {
                 storageManager.saveBlockLogger(blockLoggerEntity);
             }

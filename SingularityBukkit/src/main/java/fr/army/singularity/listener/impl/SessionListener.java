@@ -80,8 +80,8 @@ public class SessionListener implements Listener {
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
-            queuedDataSender.sendPluginMessage(playerLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 5);
-            queuedDataSender.sendPluginMessage(playerHostLoggerEntity.writeToByte(), ChannelRegistry.PLAYER_CHANNEL, 5);
+            queuedDataSender.sendPluginMessage(playerLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 5);
+            queuedDataSender.sendPluginMessage(playerHostLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 5);
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
             storageManager.savePlayerHostLogger(playerHostLoggerEntity);
