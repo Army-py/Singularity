@@ -7,6 +7,8 @@ import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import jakarta.persistence.criteria.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class PlayerHostLoggerRepository extends AbstractRepository<PlayerHostLoggerEntity> {
     public PlayerHostLoggerRepository(Class<PlayerHostLoggerEntity> entityClass, EMFLoader emfLoader) {
         super(entityClass, emfLoader);
@@ -55,9 +57,9 @@ public class PlayerHostLoggerRepository extends AbstractRepository<PlayerHostLog
                     criteriaBuilder.equal(playerJoin.get("id"), playerHostLoggerEntity.getPlayer().getId()),
                     criteriaBuilder.equal(playerHostRoot.get("ip"), playerHostLoggerEntity.getIp())
             ));
-            final PlayerHostLoggerEntity result = entityManager.createQuery(query).getSingleResult();
+            final List<PlayerHostLoggerEntity> result = entityManager.createQuery(query).getResultList();
 
-            if (result == null) {
+            if (result.isEmpty()) {
                 entityManager.persist(playerHostLoggerEntity);
             }
         });

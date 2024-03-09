@@ -73,15 +73,13 @@ public class ItemLoggerListener implements Listener {
     @EventHandler
     public void onItemDespawn(ItemDespawnEvent event) {
         final Item item = event.getEntity();
-        final EntityType entityType = item.getType();
-        final Player player = null;
 
-        saveItemLogger(player, item, entityType, ItemAction.DESPAWN);
+        saveItemLogger(null, item, null, ItemAction.DESPAWN);
     }
 
 
 
-    private void saveItemLogger(@Nullable Player player, Item item, EntityType entityType, ItemAction action) {
+    private void saveItemLogger(@Nullable Player player, Item item, @Nullable EntityType entityType, ItemAction action) {
         final QueuedDataSender queuedDataSender = new QueuedDataSender();
         final ItemStackSerializer itemStackSerializer = new ItemStackSerializer();
         final ItemStack itemStack = item.getItemStack();
@@ -95,8 +93,10 @@ public class ItemLoggerListener implements Listener {
                 .setAmount(itemStack.getAmount())
                 .setItemData(itemStackSerializer.serializeToByte(itemStack))
                 .setAction(action.name())
-                .setEntity(entityType.name())
         ;
+        if (entityType != null) {
+            itemLoggerEntity.setEntity(entityType.name());
+        }
 
         if (player != null) {
             final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
