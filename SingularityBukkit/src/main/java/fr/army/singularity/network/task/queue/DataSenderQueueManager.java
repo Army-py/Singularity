@@ -14,7 +14,7 @@ public class DataSenderQueueManager {
 
     private static final ReentrantLock pauseLock = new ReentrantLock();
     private static final Condition unpaused = pauseLock.newCondition();
-    private static volatile boolean isPaused = false;
+    private static volatile boolean isPaused = true;
 
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -22,7 +22,7 @@ public class DataSenderQueueManager {
         startService();
     }
 
-    private static void startService() {
+    public static void startService() {
         executorService.submit(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 pauseLock.lock();
