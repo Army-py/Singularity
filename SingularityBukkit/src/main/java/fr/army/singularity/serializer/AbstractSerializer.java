@@ -1,36 +1,34 @@
 package fr.army.singularity.serializer;
 
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-public class ItemStackSerializer {
+public abstract class AbstractSerializer<T> {
 
-    public byte[] serializeToByte(ItemStack itemStack) {
+    protected byte[] serialize(T object){
         try {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
-            objectOutputStream.writeObject(itemStack);
+            objectOutputStream.writeObject(object);
             objectOutputStream.flush();
 
             return arrayOutputStream.toByteArray();
         } catch (final Exception exception) {
-            throw new RuntimeException("Error turning ItemStack into byte", exception);
+            throw new RuntimeException("Error during serialization", exception);
         }
     }
 
-
-    public ItemStack[] deserializeFromByte(byte[] bytes) {
+    protected T deserialize(byte[] bytes) {
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
             final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);
-            return (ItemStack[]) objectInputStream.readObject();
+            return (T) objectInputStream.readObject();
         } catch (final Exception exception) {
-            throw new RuntimeException("Error turning byte into ItemStack", exception);
+            throw new RuntimeException("Error during deserialization", exception);
         }
     }
 }
