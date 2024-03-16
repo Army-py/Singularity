@@ -20,6 +20,7 @@ public class BlockLoggerEntity extends AbstractLoggerEntity implements Serializa
     private String block;
     private String action;
     private Date date;
+    private byte[] content;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private PlayerLoggerEntity player;
@@ -94,6 +95,15 @@ public class BlockLoggerEntity extends AbstractLoggerEntity implements Serializa
 
     public BlockLoggerEntity setDate(Date date) {
         this.date = date;
+        return this;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public BlockLoggerEntity setContent(byte[] content) {
+        this.content = content;
         return this;
     }
 

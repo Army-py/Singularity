@@ -8,6 +8,7 @@ import fr.army.singularity.database.repository.EMFLoader;
 import fr.army.singularity.listener.ListenerLoader;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.queue.DataSenderQueueManager;
+import fr.army.singularity.serializer.SerializerManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +22,7 @@ public class SingularityPlugin extends JavaPlugin {
     private ConfigLoader configLoader;
     private Config config;
     private ListenerLoader listenerLoader;
+    private SerializerManager serializerManager;
     private EMFLoader emfLoader = null;
     private StorageManager storageManager = null;
 
@@ -50,6 +52,8 @@ public class SingularityPlugin extends JavaPlugin {
         }
         this.config = new Config(configFile, databaseConfigFile);
         this.config.load();
+
+        this.serializerManager = new SerializerManager();
 
         if (!Config.storageMode.equals(StorageMode.BUNGEE)){
             emfLoader = new EMFLoader();
@@ -93,6 +97,10 @@ public class SingularityPlugin extends JavaPlugin {
 
     public ConfigLoader getConfigLoader() {
         return configLoader;
+    }
+
+    public SerializerManager getSerializerManager() {
+        return serializerManager;
     }
 
     public EMFLoader getEMFLoader() {

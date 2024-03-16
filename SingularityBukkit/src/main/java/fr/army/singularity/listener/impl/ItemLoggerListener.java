@@ -9,7 +9,7 @@ import fr.army.singularity.entity.impl.ItemLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.sender.QueuedDataSender;
-import fr.army.singularity.serializer.ItemStackSerializer;
+import fr.army.singularity.serializer.SerializerManager;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,13 +23,15 @@ import org.jetbrains.annotations.Nullable;
 public class ItemLoggerListener implements Listener {
 
     private final StorageManager storageManager;
+    private final SerializerManager serializerManager;
 
     public ItemLoggerListener(SingularityPlugin plugin) {
         this.storageManager = plugin.getStorageManager();
+        this.serializerManager = plugin.getSerializerManager();
     }
 
 
-    // TODO reduce data send size (cf serializeToByte)
+    // TODO reduce data send size (cf serialize)
 
     @EventHandler
     public void onEntityPickupItem(EntityPickupItemEvent event) {
@@ -81,7 +83,6 @@ public class ItemLoggerListener implements Listener {
 
     private void saveItemLogger(@Nullable Player player, Item item, @Nullable EntityType entityType, ItemAction action) {
         final QueuedDataSender queuedDataSender = new QueuedDataSender();
-        final ItemStackSerializer itemStackSerializer = new ItemStackSerializer();
         final ItemStack itemStack = item.getItemStack();
 
         final ItemLoggerEntity itemLoggerEntity = new ItemLoggerEntity()
@@ -91,7 +92,7 @@ public class ItemLoggerListener implements Listener {
                 .setLocZ(item.getLocation().getBlockZ())
                 .setItemType(itemStack.getType().name())
                 .setAmount(itemStack.getAmount())
-                .setItemData(itemStackSerializer.serializeToByte(itemStack))
+                .setItemData(serializerManager.serializeItemStack(itemStack))
                 .setAction(action.name())
         ;
         if (entityType != null) {

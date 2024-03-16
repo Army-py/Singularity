@@ -9,21 +9,28 @@ import fr.army.singularity.entity.impl.BlockLoggerEntity;
 import fr.army.singularity.entity.impl.PlayerLoggerEntity;
 import fr.army.singularity.network.channel.ChannelRegistry;
 import fr.army.singularity.network.task.sender.AsyncDataSender;
+import fr.army.singularity.serializer.SerializerManager;
+import fr.army.singularity.serializer.impl.InventorySerializer;
+import fr.army.singularity.serializer.impl.ItemStackSerializer;
 import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockListener implements Listener {
 
     private final StorageManager storageManager;
+    private final SerializerManager serializerManager;
 
     public BlockListener(SingularityPlugin plugin) {
         this.storageManager = plugin.getStorageManager();
+        this.serializerManager = plugin.getSerializerManager();
     }
 
 
@@ -61,6 +68,10 @@ public class BlockListener implements Listener {
                 .setBlock(block.getType().name())
                 .setAction(action)
         ;
+        if (block.getState() instanceof InventoryHolder){
+            final byte[] content = serializerManager.serializeInventory(((InventoryHolder) block.getState()).getInventory().getContents());
+            blockLoggerEntity.setContent(content);
+        }
 
         if (player != null) {
             final PlayerLoggerEntity playerLoggerEntity = new PlayerLoggerEntity()
