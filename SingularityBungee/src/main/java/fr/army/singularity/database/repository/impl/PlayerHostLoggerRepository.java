@@ -61,6 +61,8 @@ public class PlayerHostLoggerRepository extends AbstractRepository<PlayerHostLog
 
             if (result.isEmpty()) {
                 entityManager.persist(playerHostLoggerEntity);
+            }else {
+                entityManager.merge(playerHostLoggerEntity);
             }
         });
     }

@@ -9,11 +9,14 @@ import java.util.*;
 @Entity
 public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Serializable {
     @Id
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private PlayerLoggerEntity player;
 
     @Id
     private String ip;
+
+    @OneToMany(mappedBy = "playerHost", cascade = CascadeType.ALL)
+    private List<ConnectionLoggerEntity> connections = new ArrayList<>();
 
 
     @Override
@@ -36,9 +39,6 @@ public class PlayerHostLoggerEntity extends AbstractLoggerEntity implements Seri
         this.player = player;
         return this;
     }
-
-    @OneToMany(mappedBy = "playerHost")
-    private List<ConnectionLoggerEntity> connections = new ArrayList<>();
 
     public List<ConnectionLoggerEntity> getConnections() {
         return connections;

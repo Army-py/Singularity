@@ -12,10 +12,7 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
     private String id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
-    private List<ConnectionLoggerEntity> connections = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "player", fetch = FetchType.LAZY)
     private List<PlayerHostLoggerEntity> hosts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
@@ -56,14 +53,6 @@ public class PlayerLoggerEntity extends AbstractLoggerEntity implements Serializ
 
     public String getName() {
         return name;
-    }
-
-    public List<ConnectionLoggerEntity> getConnections() {
-        return connections;
-    }
-
-    public void setConnections(List<ConnectionLoggerEntity> connections) {
-        this.connections = connections;
     }
 
     public List<PlayerHostLoggerEntity> getHosts() {

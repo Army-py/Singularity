@@ -62,7 +62,7 @@ public class SessionListener implements Listener {
                 .setPlayer(playerLoggerEntity)
                 .setIp(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())
         ;
-        playerLoggerEntity.getHosts().add(playerHostLoggerEntity);
+        // playerLoggerEntity.getHosts().add(playerHostLoggerEntity);
 
         final Location location = player.getLocation();
         final ConnectionLoggerEntity connectionLoggerEntity = new ConnectionLoggerEntity()
@@ -72,16 +72,14 @@ public class SessionListener implements Listener {
                 .setLocZ(location.getZ())
                 .setWorld(Objects.requireNonNull(location.getWorld()).getName())
                 .setPlayerHost(playerHostLoggerEntity)
-                .setPlayer(playerLoggerEntity)
         ;
-
-        playerLoggerEntity.getConnections().add(connectionLoggerEntity);
+        playerHostLoggerEntity.getConnections().add(connectionLoggerEntity);
 
         if (Config.storageMode.equals(StorageMode.BUNGEE)){
             connectionLoggerEntity.setServerName(Config.serverName);
 
             queuedDataSender.sendPluginMessage(playerLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 5);
-            queuedDataSender.sendPluginMessage(playerHostLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 5);
+            queuedDataSender.sendPluginMessage(playerHostLoggerEntity, ChannelRegistry.PLAYER_CHANNEL, 8);
         } else {
             storageManager.savePlayerLogger(playerLoggerEntity);
             storageManager.savePlayerHostLogger(playerHostLoggerEntity);

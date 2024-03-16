@@ -23,11 +23,8 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
     private String serverName;
     private int action;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PlayerHostLoggerEntity playerHost;
-
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private PlayerLoggerEntity player;
 
 
     @PrePersist
@@ -38,15 +35,6 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
 
     public Long getId() {
         return id;
-    }
-
-    public PlayerLoggerEntity getPlayer() {
-        return player;
-    }
-
-    public ConnectionLoggerEntity setPlayer(PlayerLoggerEntity player) {
-        this.player = player;
-        return this;
     }
 
     public Date getDate() {
