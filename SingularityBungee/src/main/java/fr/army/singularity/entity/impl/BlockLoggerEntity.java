@@ -19,17 +19,12 @@ public class BlockLoggerEntity extends AbstractLoggerEntity implements Serializa
     private int locZ;
     private String block;
     private String action;
-    private Date date;
+    private Date date = new Date();
     private byte[] content;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private PlayerLoggerEntity player;
 
-
-    @PrePersist
-    public void prePersist() {
-        date = new Date();
-    }
 
     public Long getId() {
         return id;

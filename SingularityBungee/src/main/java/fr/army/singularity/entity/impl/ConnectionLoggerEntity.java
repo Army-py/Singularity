@@ -15,7 +15,7 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private Date date = new Date();
     private double locX;
     private double locY;
     private double locZ;
@@ -25,12 +25,6 @@ public class ConnectionLoggerEntity extends AbstractLoggerEntity implements Seri
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PlayerHostLoggerEntity playerHost;
-
-
-    @PrePersist
-    public void prePersist() {
-        this.date = new Date();
-    }
 
 
     public Long getId() {

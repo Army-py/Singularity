@@ -20,16 +20,11 @@ public class ItemLoggerEntity extends AbstractLoggerEntity implements Serializab
     private int amount;
     private byte[] itemData;
     private String action;
-    private Date date;
+    private Date date = new Date();
     private String entity;
     @ManyToOne(cascade = CascadeType.MERGE)
     private PlayerLoggerEntity player;
 
-
-    @PrePersist
-    public void prePersist() {
-        date = new Date();
-    }
 
     public Long getId() {
         return id;
